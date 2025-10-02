@@ -1,0 +1,12 @@
+<div class="input-group">
+  <form class="input-group" (ngSubmit)="onSubmit()">
+    <label>email address</label>
+    <input type="email" name="email" [(ngModel)]="enteredUserEmail" />
+
+    <label>password</label>
+    <input type="password" name="password" [(ngModel)]="password" />
+
+    <button type="submit">Sign on!</button>
+  </form>
+  <button (click)="onClick()">User</button>
+</div>
