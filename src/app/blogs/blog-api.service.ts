@@ -49,8 +49,7 @@ export class BlogApiService {
   getCurrentToken(): {} | boolean {
     const user = localStorage.getItem('blog_user');
     if (user) {
-      // return JSON.parse(user);
-      return user;
+      return JSON.parse(user).token;
     }
     return false;
   }

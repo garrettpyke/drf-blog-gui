@@ -28,7 +28,7 @@ export class Login {
   }
 
   onClick() {
-    const user = this.blogApiService.getCurrentToken();
-    console.log(`current User: ${user}`);
+    const token = this.blogApiService.getCurrentToken();
+    console.log(`current token: ${token}`);
   }
 }
