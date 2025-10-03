@@ -66,7 +66,6 @@ export class BlogApiService {
     const token = this.getCurrentToken();
 
     if (token) {
-      // <[[], {}]>
       return this.httpClient
         .get<[[], {}]>(url, {
           headers: {

@@ -3,13 +3,14 @@ import { Component, signal } from '@angular/core';
 
 import { Header } from './header/header';
 import { Login } from './login/login';
+import { Blogs } from './blogs/blogs';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Login],
+  imports: [Header, Login, Blogs],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('blog');
+  protected readonly title = signal('BlogApi front end');
 }

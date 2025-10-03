@@ -1,1 +1,10 @@
-<p>blogs works!</p>
+<section>
+  <p>All blog entries</p>
+  @for (blog of blogs(); track blog.id) {
+  <!-- <h3>{{ blog.title }}</h3>
+  <p>{{ blog.content }}</p> -->
+  <app-blog [blog]="blog" />
+  } @if (!blogs()) {
+  <h5>Blogs not loaded...</h5>
+  }
+</section>
