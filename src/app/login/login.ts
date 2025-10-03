@@ -28,7 +28,12 @@ export class Login {
   }
 
   onClick() {
-    const token = this.blogApiService.getCurrentToken();
-    console.log(`current token: ${token}`);
+    // const token = this.blogApiService.getCurrentToken();
+    // console.log(`current token: ${token}`);
+    const subscription = this.blogApiService.loadBlogs().subscribe({});
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
   }
 }
