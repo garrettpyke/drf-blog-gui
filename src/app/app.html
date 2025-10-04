@@ -1,6 +1,10 @@
 <app-header />
 
 <main>
-  <app-login />
+  @if (!signedOn()) {
+  <app-login (isAuthenticated)="onIsAuthenticated($event)" />
+  } @else {
   <app-blogs />
+  }
+  <button></button>
 </main>

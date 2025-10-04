@@ -13,4 +13,9 @@ import { Blogs } from './blogs/blogs';
 })
 export class App {
   protected readonly title = signal('BlogApi front end');
+  signedOn = signal(false);
+
+  onIsAuthenticated(isAuthenticated: boolean) {
+    this.signedOn.set(isAuthenticated);
+  }
 }

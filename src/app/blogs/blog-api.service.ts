@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 
 import { type Blog } from './blog.model';
 
@@ -16,10 +16,11 @@ export interface BlogsResponse {
 
 @Injectable({ providedIn: 'root' })
 export class BlogApiService {
-  user?: User;
+  private user = signal<User | undefined>(undefined);
   private blogs = signal<Blog[]>([]);
   private httpClient = inject(HttpClient);
 
+  currentUser = this.user.asReadonly();
   loadedBlogs = this.blogs.asReadonly();
 
   loadBlogs() {
@@ -36,7 +37,8 @@ export class BlogApiService {
         tap({
           next: (respData) => {
             // console.log(respData.user);
-            this.user = respData.user;
+            // this.user = respData.user;
+            this.user.set(respData.user);
             localStorage.setItem('blog_user', JSON.stringify(respData.user));
           },
         })
@@ -49,13 +51,12 @@ export class BlogApiService {
       );
   }
 
-  getCurrentToken(): {} | boolean {
-    const user = localStorage.getItem('blog_user');
-    if (user) {
-      return JSON.parse(user).token;
-    }
-    return false;
-  }
+  // getCurrentToken() {
+  //   const user = localStorage.getItem('blog_user');
+  //   if (user) {
+  //     return JSON.parse(user).token;
+  //   }
+  // }
 
   login(email: string, password: string) {
     return this.refreshToken(email, password);
@@ -63,7 +64,7 @@ export class BlogApiService {
 
   // todo: use this.user for token, stop using local storage
   private fetchBlogs(url: string, errMessage: string) {
-    const token = this.getCurrentToken();
+    const token = this.user()!.token;
 
     if (token) {
       return this.httpClient
