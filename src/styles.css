@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+/* 
 header {
   text-align: center;
   margin-bottom: 2rem;
@@ -28,3 +28,31 @@ header p {
 div {
   text-align: center;
 }
+
+button {
+  display: grid;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #76c0ae;
+  border-radius: 0.25rem;
+  background-color: #83e6c0;
+  color: #1a1f1d;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #aaf1d6;
+}
+
+.app-div {
+  align-items: center;
+  text-align: center;
+  display: grid;
+  justify-content: space-evenly;
+  gap: 1.5rem;
+} */
