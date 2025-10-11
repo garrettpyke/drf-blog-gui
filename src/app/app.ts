@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 // import { RouterOutlet } from '@angular/router';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 import { Header } from './header/header';
 import { Login } from './login/login';
@@ -7,7 +8,7 @@ import { Blogs } from './blogs/blogs';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Login, Blogs],
+  imports: [Header, Login, Blogs, MatSlideToggle],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

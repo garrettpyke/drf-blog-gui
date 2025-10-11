@@ -1,11 +1,12 @@
 <app-header />
 
-<h1 class="text-3xl font-bold underline">Hello world!</h1>
+<h2 class="text-3xl font-bold underline">(We need a graphic here.)</h2>
 
 <main>
   @if (!signedOn()) {
   <app-login (isAuthenticated)="onIsAuthenticated($event)" />
   } @else {
+  <mat-slide-toggle>Toggle me!</mat-slide-toggle>
   <app-blogs />
   <div class="app-div">
     <button>Blogs with comments</button>

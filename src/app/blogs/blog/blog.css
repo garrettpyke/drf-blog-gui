@@ -1,0 +1,13 @@
+.blog-card {
+  max-width: 400px;
+  font-family: Roboto, sans-serif;
+  margin-bottom: 10px;
+}
+
+.blog-card-title {
+  font-family: Roboto, sans-serif;
+}
+
+.blog-card-footer {
+  padding: 16px;
+}
