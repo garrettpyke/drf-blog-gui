@@ -62,7 +62,7 @@ export class BlogApiService {
     return this.refreshToken(email, password);
   }
 
-  // todo: use this.user for token, stop using local storage
+  // todo: use this.user for token, **stop using local storage**
   private fetchBlogs(url: string, errMessage: string) {
     const token = this.user()!.token;
 
