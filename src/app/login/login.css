@@ -1,4 +1,7 @@
 form {
+  display: flex;
+  flex-direction: column;
+  width: 250px; /* todo: make responsive */
   align-items: center;
   text-align: center;
   padding: 1rem;
@@ -10,17 +13,13 @@ form {
 }
 
 .input-group {
+  display: flexbox;
   align-items: center;
   text-align: center;
-  display: grid;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  border-radius: 5%;
   gap: 0.5rem;
 }
-
-/* .input-group div {
-  align-self: center;
-  align-content: center;
-} */
 
 label {
   text-align: center;
@@ -29,27 +28,27 @@ label {
   color: whitesmoke;
   display: block;
   font-weight: bold;
-  padding-bottom: 0;
 }
 
 button {
   width: 100%;
-  border: none;
   border-radius: 4px;
+  border: none;
   font-size: 1rem;
   padding: 0.5rem;
   background-color: goldenrod;
 }
 
 button:hover {
-  background-color: #aaf1d6;
+  background-color: rgb(214, 196, 153);
 }
 
 input {
-  padding: 0.5rem;
+  padding: 0.75rem;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
+  width: 80%;
 }
 
 input:focus {
