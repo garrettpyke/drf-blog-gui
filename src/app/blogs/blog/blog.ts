@@ -14,6 +14,7 @@ type MatCardAppearance = 'outlined' | 'raised' | 'filled';
 })
 export class Blog {
   blog = input.required<BlogModel>();
+  appearance: MatCardAppearance = 'raised';
 
   title: any = computed(() => {
     return this.blog().title;
