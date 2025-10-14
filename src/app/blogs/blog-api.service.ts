@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 
 import { type Blog } from './blog.model';
+import { type BlogDetail } from './blog-detail.model';
+import { type Comment } from '../comments/comment.model';
 
 export interface User {
   id: number;
@@ -17,12 +19,14 @@ export interface BlogsResponse {
 
 @Injectable({ providedIn: 'root' })
 export class BlogApiService {
+  private httpClient = inject(HttpClient);
   private user = signal<User | undefined>(undefined);
   private blogs = signal<Blog[]>([]);
-  private httpClient = inject(HttpClient);
+  private blogDetail = signal<BlogDetail | undefined>(undefined);
 
   currentUser = this.user.asReadonly();
   loadedBlogs = this.blogs.asReadonly();
+  loadedBlog = this.blogDetail.asReadonly();
 
   constructor() {
     // todo: See [this link](https://medium.com/bb-tutorials-and-thoughts/retaining-state-of-the-angular-app-when-page-refresh-with-ngrx-6c486d3012a9)
@@ -65,7 +69,7 @@ export class BlogApiService {
     return this.refreshToken(email, password);
   }
 
-  logout() {
+  logout(): Observable<{} | string> {
     const token = this.user()!.token;
 
     if (token) {
@@ -84,13 +88,13 @@ export class BlogApiService {
           })
         );
     } else {
-      return new Observable(() => {
-        'Token not found!';
+      return new Observable((observer) => {
+        observer.error('Token not found!');
       });
     }
   }
 
-  private fetchBlogs(url: string, errMessage: string) {
+  private fetchBlogs(url: string, errMessage: string): Observable<{} | string> {
     const token = this.user()!.token;
 
     if (token) {
@@ -116,8 +120,39 @@ export class BlogApiService {
           })
         );
     }
-    return new Observable(() => {
-      'Token not found!';
+    return new Observable((observer) => {
+      observer.error('Token not found!');
+    });
+  }
+
+  fetchBlogDetail(id: number) {
+    const token = this.user()!.token;
+
+    if (token) {
+      return this.httpClient
+        .get<Blog>(`http://localhost:8000/api/blog/${id}/`, {
+          headers: {
+            Authorization: `token ${token}`,
+          },
+        })
+        .pipe(
+          tap({
+            next: (respData) => {
+              console.log(respData);
+            },
+          })
+        )
+        .pipe(
+          catchError((error) => {
+            console.log(error);
+            return throwError(() => new Error('Error fetching blog'));
+          })
+        );
+    }
+    return new Observable((observer) => {
+      observer.error('Token not found!');
     });
   }
 }
+
+// http://localhost:8000/api/blog/10/
