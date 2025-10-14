@@ -12,6 +12,7 @@ export interface User {
 export interface BlogsResponse {
   // todo: revisit this in fetch operations
   response: [blogs: Blog[], user: User];
+  // response: {blogs: Blog[], user: User};
 }
 
 @Injectable({ providedIn: 'root' })
@@ -51,15 +52,33 @@ export class BlogApiService {
       );
   }
 
-  // getCurrentToken() {
-  //   const user = localStorage.getItem('blog_user');
-  //   if (user) {
-  //     return JSON.parse(user).token;
-  //   }
-  // }
-
   login(email: string, password: string) {
     return this.refreshToken(email, password);
+  }
+
+  logout() {
+    const token = this.user()!.token;
+
+    if (token) {
+      return this.httpClient
+        .delete('http://localhost:8000/api/sign-out/', {
+          headers: {
+            Authorization: `token ${token}`,
+          },
+        })
+        .pipe(
+          tap({
+            next: () => {
+              this.user.set(undefined);
+              localStorage.removeItem('blog_user');
+            },
+          })
+        );
+    } else {
+      return new Observable(() => {
+        'Token not found!';
+      });
+    }
   }
 
   // todo: use this.user for token, **stop using local storage**

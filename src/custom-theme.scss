@@ -42,3 +42,12 @@ app-blog {
     elevated-container-elevation: #014f86,
   ));
 }
+
+:root {
+  @include mat.toolbar-overrides((
+    container-background-color: goldenrod,
+    container-text-color: light-dark(#005cbb, #abc7ff),
+    title-text-font: '20px Roboto, sans-serif',
+    title-text-weight: 400
+  ));
+}

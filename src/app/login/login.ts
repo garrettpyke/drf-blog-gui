@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, output, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { BlogApiService } from '../blogs/blog-api.service';
@@ -21,6 +21,7 @@ export class Login implements OnInit {
   }
 
   onSubmit() {
+    // todo: add error handling
     const subscription = this.blogApiService.login(this.enteredUserEmail, this.password).subscribe({
       complete: () => {
         console.log(`login.onSubmit: ${this.blogApiService.currentUser()?.email}`);

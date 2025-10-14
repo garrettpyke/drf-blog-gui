@@ -1,5 +1,4 @@
 <section>
-  <p>All blog entries</p>
   @for (blog of blogs(); track blog.id) {
   <app-blog [blog]="blog" />
   } @if (!blogs()) {

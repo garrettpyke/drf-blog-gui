@@ -1,3 +1,5 @@
+<!-- <title>{{ title() }}</title> -->
+<!-- todo, (maybe) create a <head> component & use in index.html -->
 <app-header />
 
 <!-- <h2 class="app-subheader">(We need a graphic here.)</h2> -->
@@ -6,7 +8,8 @@
   @if (!signedOn()) {
   <app-login (isAuthenticated)="onIsAuthenticated($event)" />
   } @else {
-  <mat-slide-toggle>Toggle me!</mat-slide-toggle>
+
+  <app-toolbar (isAuthenticated)="onIsAuthenticated($event)" />
   <app-blogs />
   <div class="app-div">
     <button>Blogs with comments</button>

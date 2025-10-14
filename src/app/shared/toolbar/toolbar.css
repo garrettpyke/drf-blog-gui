@@ -1,0 +1,12 @@
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+.section-toolbar {
+  margin-right: 8px;
+}
+.section-toolbar-menu {
+  margin-left: 8px;
+}
+.section-toolbar-btn {
+  margin-left: auto;
+}
