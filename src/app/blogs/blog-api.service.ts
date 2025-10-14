@@ -24,6 +24,15 @@ export class BlogApiService {
   currentUser = this.user.asReadonly();
   loadedBlogs = this.blogs.asReadonly();
 
+  constructor() {
+    // todo: See [this link](https://medium.com/bb-tutorials-and-thoughts/retaining-state-of-the-angular-app-when-page-refresh-with-ngrx-6c486d3012a9)
+    //* ...for ideas on how to persist state across page refreshes
+    const savedUser = localStorage.getItem('blog_user');
+    if (savedUser) {
+      this.user.set(JSON.parse(savedUser));
+    }
+  }
+
   loadBlogs() {
     return this.fetchBlogs('http://localhost:8000/api/blogs/', 'Error loading blogs');
   }
@@ -81,7 +90,6 @@ export class BlogApiService {
     }
   }
 
-  // todo: use this.user for token, **stop using local storage**
   private fetchBlogs(url: string, errMessage: string) {
     const token = this.user()!.token;
 

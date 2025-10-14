@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, output } from '@angular/core';
+import { Component, DestroyRef, inject, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { BlogApiService } from '../blogs/blog-api.service';
@@ -9,16 +9,12 @@ import { BlogApiService } from '../blogs/blog-api.service';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login implements OnInit {
+export class Login {
   enteredUserEmail = 'garrettpyke@gmail.com';
   password = 'password';
   private blogApiService = inject(BlogApiService);
   private destroyRef = inject(DestroyRef);
   isAuthenticated = output<boolean>();
-
-  ngOnInit(): void {
-    this.isAuthenticated.emit(false);
-  }
 
   onSubmit() {
     // todo: add error handling
