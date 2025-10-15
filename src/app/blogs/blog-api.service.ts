@@ -99,7 +99,7 @@ export class BlogApiService {
 
     if (token) {
       return this.httpClient
-        .get<[[], {}]>(url, {
+        .get<[Blog[], User]>(url, {
           headers: {
             Authorization: `token ${token}`,
           },
@@ -107,7 +107,7 @@ export class BlogApiService {
         .pipe(
           tap({
             next: (respData) => {
-              // console.log(respData[0]);
+              // console.log(respData[1]);
               this.blogs.set(respData[0]);
               console.log(this.blogs());
             },
