@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, output } from '@angular/core';
 
 import { BlogApiService } from './blog-api.service';
 import { Blog } from './blog/blog';
@@ -17,6 +17,10 @@ export class Blogs implements OnInit {
   private blogApiService = inject(BlogApiService);
   private destroyRef = inject(DestroyRef);
   blogs = this.blogApiService.loadedBlogs;
+  // blogDetail = output<BlogDetail>(); //* use later on separate component
+  // blogDetail = signal<BlogDetail | undefined>(undefined);
+  blogDetail = signal(this.blogApiService.loadedBlogDetail());
+  blogArray = signal<any>([]);
 
   ngOnInit(): void {
     this.isFetching.set(true);
@@ -37,8 +41,6 @@ export class Blogs implements OnInit {
   }
 
   onClickBlog(id: number) {
-    this.blogClicked.set(id);
-
     const subscription = this.blogApiService.fetchBlogDetail(id).subscribe({
       // next: (blog) => {
       //   console.log('Fetched blog detail:', blog);
@@ -52,6 +54,10 @@ export class Blogs implements OnInit {
           `...and blogApiService.loadedBlogDetail is`,
           this.blogApiService.loadedBlogDetail()
         );
+
+        this.blogDetail.set(this.blogApiService.loadedBlogDetail());
+        this.blogArray.set(this.blogApiService.loadedBlogDetail()!);
+        this.blogClicked.set(id);
       },
     });
 

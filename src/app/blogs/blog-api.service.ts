@@ -9,7 +9,7 @@ import { type Comment } from '../comments/comment.model';
 export interface User {
   id: number;
   email: string;
-  token: string;
+  token?: string;
 }
 export interface BlogsResponse {
   // todo: revisit this in fetch operations
@@ -130,15 +130,19 @@ export class BlogApiService {
 
     if (token) {
       return this.httpClient
-        .get<BlogDetail>(`http://localhost:8000/api/blog/${id}/`, {
+        .get<[Blog, Comment[]]>(`http://localhost:8000/api/blog/${id}/`, {
           headers: {
             Authorization: `token ${token}`,
           },
         })
         .pipe(
           tap({
-            next: (blog) => {
-              this.blogDetail.set(blog);
+            next: (respData) => {
+              console.log(`fetchBlogDetail: ${respData[0]}`);
+              this.blogDetail.set({
+                ...respData[0],
+                comments: respData[1],
+              });
             },
           })
         )
@@ -154,5 +158,3 @@ export class BlogApiService {
     });
   }
 }
-
-// http://localhost:8000/api/blog/10/

@@ -1,1 +1,5 @@
-<p>blog-detail works! Blog ID: {{ blogId() }}</p>
+<p>blog-detail works! Blog Title: {{ blogDetail()?.title }}</p>
+<p>Content: {{ blogDetail()?.content }}</p>
+<p>Author: {{ blogDetail()?.author }}</p>
+<p>Published on: {{ blogDetail()?.updated_at }}</p>
+<!-- <p>Content: {{ blogArray().content }}</p> -->
