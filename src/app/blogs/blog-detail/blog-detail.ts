@@ -1,20 +1,22 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+type MatCardAppearance = 'outlined' | 'raised' | 'filled';
 
+// import { type Blog as BlogModel } from '../blog.model';
 import { type BlogDetail as BlogDtl } from '../blog-detail.model';
 
 @Component({
   selector: 'app-blog-detail',
-  imports: [],
+  imports: [MatCardModule, MatChipsModule, MatIconModule, DatePipe],
   templateUrl: './blog-detail.html',
   styleUrl: './blog-detail.css',
 })
-export class BlogDetail implements OnInit {
-  // blogId = input<number>();
+export class BlogDetail {
+  blogAppearance: MatCardAppearance = 'raised';
+  commentAppearance: MatCardAppearance = 'filled';
   blogDetail = input<BlogDtl | undefined>();
-  blogArray = input<any[]>([]);
-
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    // console.log(`blogArray initialized with blogDetail:`, this.blogArray());
-  }
+  comments = computed(() => this.blogDetail()?.comments ?? []);
 }

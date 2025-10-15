@@ -1,10 +1,10 @@
 import { Component, computed, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-
-import { type Blog as BlogModel } from '../blog.model';
 import { MatIconModule } from '@angular/material/icon';
 type MatCardAppearance = 'outlined' | 'raised' | 'filled';
+
+import { type Blog as BlogModel } from '../blog.model';
 
 @Component({
   selector: 'app-blog',

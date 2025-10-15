@@ -1,7 +1,7 @@
 <!-- todo next: Implement blog detail view, then move shared toolbar here -->
 <section>
   @if (blogClicked()) {
-  <app-blog-detail [blogDetail]="blogDetail()" [blogArray]="blogArray()" />
+  <app-blog-detail [blogDetail]="blogDetail()" />
   } @else { @for (blog of blogs(); track blog.id) {
   <app-blog [blog]="blog" (click)="onClickBlog(blog.id)" />
   } @if (!blogs()) {

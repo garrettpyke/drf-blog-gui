@@ -1,5 +1,32 @@
-<p>blog-detail works! Blog Title: {{ blogDetail()?.title }}</p>
-<p>Content: {{ blogDetail()?.content }}</p>
-<p>Author: {{ blogDetail()?.author }}</p>
-<p>Published on: {{ blogDetail()?.updated_at }}</p>
-<!-- <p>Content: {{ blogArray().content }}</p> -->
+<!-- todo: Minimize repetition with other components, blog etc. -->
+<mat-card class="content-card blog-card" [appearance]="blogAppearance">
+  <mat-card-header class="content-card-header blog-card-header">
+    <mat-card-title class="content-card-title blog-card-title">{{
+      blogDetail()!.title
+    }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{ blogDetail()!.content }}</p>
+  </mat-card-content>
+  <mat-card-footer class="content-card-footer blog-card-footer">
+    <mat-chip-set aria-label="Blog actions">
+      <mat-chip><mat-icon>thumb_up</mat-icon></mat-chip>
+      <mat-chip><mat-icon>thumb_down</mat-icon></mat-chip>
+      <mat-chip><mat-icon>sentiment_very_dissatisfied</mat-icon></mat-chip>
+    </mat-chip-set>
+  </mat-card-footer>
+</mat-card>
+@for (comment of comments(); track comment.id) {
+<mat-card class="content-card comment-card" [appearance]="commentAppearance">
+  <mat-card-header class="content-card-header comment-card-header">
+    <mat-card-title class="content-card-title comment-card-title">{{
+      comment.content
+    }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{ comment.author }}</p>
+    <p>{{ comment.updated_at | date : 'medium' }}</p>
+    <!-- <p>{{ '2025-10-15T10:44:01.853968-06:00' | date : 'short' }}</p> -->
+  </mat-card-content>
+</mat-card>
+}
