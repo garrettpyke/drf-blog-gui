@@ -2,16 +2,18 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 
 import { BlogApiService } from './blog-api.service';
 import { Blog } from './blog/blog';
+import { BlogDetail } from './blog-detail/blog-detail';
 
 @Component({
   selector: 'app-blogs',
-  imports: [Blog],
+  imports: [Blog, BlogDetail],
   templateUrl: './blogs.html',
   styleUrl: './blogs.css',
 })
 export class Blogs implements OnInit {
-  // blogs = signal<Blog[] | undefined>(undefined);
   isFetching = signal(false);
+  blogClicked = signal<number | null>(null);
+  // blogSelected = signal<Blog | undefined>(undefined);
   private blogApiService = inject(BlogApiService);
   private destroyRef = inject(DestroyRef);
   blogs = this.blogApiService.loadedBlogs;
@@ -26,6 +28,30 @@ export class Blogs implements OnInit {
       complete: () => {
         console.log('blogs.onInit fetching complete!');
         this.isFetching.set(false);
+      },
+    });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
+  }
+
+  onClickBlog(id: number) {
+    this.blogClicked.set(id);
+
+    const subscription = this.blogApiService.fetchBlogDetail(id).subscribe({
+      // next: (blog) => {
+      //   console.log('Fetched blog detail:', blog);
+      // },
+      error: (error: Error) => {
+        console.log('Error fetching blog detail:', error);
+      },
+      complete: () => {
+        console.log('Completed fetching blog detail...');
+        console.log(
+          `...and blogApiService.loadedBlogDetail is`,
+          this.blogApiService.loadedBlogDetail()
+        );
       },
     });
 

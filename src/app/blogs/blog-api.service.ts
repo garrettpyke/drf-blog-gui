@@ -26,7 +26,7 @@ export class BlogApiService {
 
   currentUser = this.user.asReadonly();
   loadedBlogs = this.blogs.asReadonly();
-  loadedBlog = this.blogDetail.asReadonly();
+  loadedBlogDetail = this.blogDetail.asReadonly();
 
   constructor() {
     // todo: See [this link](https://medium.com/bb-tutorials-and-thoughts/retaining-state-of-the-angular-app-when-page-refresh-with-ngrx-6c486d3012a9)
@@ -130,15 +130,15 @@ export class BlogApiService {
 
     if (token) {
       return this.httpClient
-        .get<Blog>(`http://localhost:8000/api/blog/${id}/`, {
+        .get<BlogDetail>(`http://localhost:8000/api/blog/${id}/`, {
           headers: {
             Authorization: `token ${token}`,
           },
         })
         .pipe(
           tap({
-            next: (respData) => {
-              console.log(respData);
+            next: (blog) => {
+              this.blogDetail.set(blog);
             },
           })
         )

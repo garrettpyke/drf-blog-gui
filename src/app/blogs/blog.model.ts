@@ -1,3 +1,4 @@
+// todo: Move all models to a separate folder for better organization
 export interface Blog {
   id: number;
   title: string;
