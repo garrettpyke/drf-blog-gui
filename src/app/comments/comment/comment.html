@@ -1,0 +1,11 @@
+<mat-card class="content-card comment-card" [appearance]="commentAppearance">
+  <mat-card-header class="content-card-header comment-card-header">
+    <mat-card-title class="content-card-title comment-card-title">{{
+      comment()?.content
+    }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{ authorEmail }}</p>
+    <p>{{ comment()?.updated_at | date : 'medium' }}</p>
+  </mat-card-content>
+</mat-card>

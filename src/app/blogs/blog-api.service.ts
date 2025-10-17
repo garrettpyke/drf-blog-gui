@@ -177,14 +177,6 @@ export class BlogApiService {
               this.users.set(respData.users), console.log(this.users());
             })
           )
-          // .pipe(
-          //   tap({
-          //     next: (users) => {
-          //       // console.log('fetchAuthors: ', users);
-          //       this.users.set(users);
-          //     },
-          //   })
-          // )
           .pipe(
             catchError((error) => {
               console.log(error);

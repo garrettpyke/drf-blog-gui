@@ -17,10 +17,7 @@ export class Blogs implements OnInit {
   private blogApiService = inject(BlogApiService);
   private destroyRef = inject(DestroyRef);
   blogs = this.blogApiService.loadedBlogs;
-  // blogDetail = output<BlogDetail>(); //* use later on separate component
-  // blogDetail = signal<BlogDetail | undefined>(undefined);
   blogDetail = signal(this.blogApiService.loadedBlogDetail());
-  blogArray = signal<any>([]);
 
   ngOnInit(): void {
     this.isFetching.set(true);
@@ -56,7 +53,6 @@ export class Blogs implements OnInit {
         );
 
         this.blogDetail.set(this.blogApiService.loadedBlogDetail());
-        this.blogArray.set(this.blogApiService.loadedBlogDetail()!);
         this.blogClicked.set(id);
       },
     });

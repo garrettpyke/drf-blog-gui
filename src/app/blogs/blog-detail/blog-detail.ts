@@ -5,23 +5,21 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 type MatCardAppearance = 'outlined' | 'raised' | 'filled';
 
-// import { type Blog as BlogModel } from '../blog.model';
-import { type BlogDetail as BlogDtl } from '../blog-detail.model';
+import { Comment } from '../../comments/comment/comment';
+import { type BlogDetail as BlogDetailModel } from '../blog-detail.model';
 import { type User } from '../blog-api.service';
 import { BlogApiService } from '../blog-api.service';
-// import { Comment } from '../../comments/comment.model';
-// import { Blog } from '../blog/blog';
 
 @Component({
   selector: 'app-blog-detail',
-  imports: [MatCardModule, MatChipsModule, MatIconModule, DatePipe],
+  imports: [MatCardModule, MatChipsModule, MatIconModule, DatePipe, Comment],
   templateUrl: './blog-detail.html',
   styleUrl: './blog-detail.css',
 })
 export class BlogDetail implements OnInit {
   blogAppearance: MatCardAppearance = 'raised';
-  commentAppearance: MatCardAppearance = 'filled';
-  blogDetail = input<BlogDtl | undefined>();
+  // commentAppearance: MatCardAppearance = 'filled';
+  blogDetail = input<BlogDetailModel | undefined>();
   comments = computed(() => this.blogDetail()?.comments ?? []);
   private destroyRef = inject(DestroyRef);
   blogApiService = inject(BlogApiService);

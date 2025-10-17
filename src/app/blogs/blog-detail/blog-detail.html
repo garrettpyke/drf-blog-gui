@@ -18,16 +18,5 @@
   </mat-card-footer>
 </mat-card>
 @for (comment of comments(); track comment.id) {
-<mat-card class="content-card comment-card" [appearance]="commentAppearance">
-  <mat-card-header class="content-card-header comment-card-header">
-    <mat-card-title class="content-card-title comment-card-title">{{
-      comment.content
-    }}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <p>{{ comment.author }}</p>
-    <p>{{ comment.updated_at | date : 'medium' }}</p>
-    <!-- <p>{{ '2025-10-15T10:44:01.853968-06:00' | date : 'short' }}</p> -->
-  </mat-card-content>
-</mat-card>
+<app-comment [comment]="comment" [users]="users()" />
 }
