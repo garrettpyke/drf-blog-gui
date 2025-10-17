@@ -19,5 +19,5 @@
   </mat-card-footer>
 </mat-card>
 @for (comment of comments(); track comment.id) {
-<app-comment [comment]="comment" [users]="users()" />
+<app-comment [comment]="comment" [author]="authorInfo(comment.author)" />
 }

@@ -1,4 +1,4 @@
-import { Component, input, computed, inject, DestroyRef } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -7,8 +7,6 @@ type MatCardAppearance = 'outlined' | 'raised' | 'filled';
 
 import { Comment } from '../../comments/comment/comment';
 import { type BlogDetail as BlogDetailModel } from '../blog-detail.model';
-import { type User } from '../blog-api.service';
-import { BlogApiService } from '../blog-api.service';
 
 @Component({
   selector: 'app-blog-detail',
@@ -17,13 +15,10 @@ import { BlogApiService } from '../blog-api.service';
   styleUrl: './blog-detail.css',
 })
 export class BlogDetail {
-  blogAppearance: MatCardAppearance = 'raised';
   blogDetail = input<BlogDetailModel | undefined>();
+  users = input<{ id: number; email: string }[] | undefined>();
   comments = computed(() => this.blogDetail()?.comments ?? []);
-  private destroyRef = inject(DestroyRef);
-  blogApiService = inject(BlogApiService);
-  // users = signal<User[]>([]);
-  users = computed(() => this.blogApiService.loadedAuthors());
+  blogAppearance: MatCardAppearance = 'raised';
 
   get authorEmail(): string {
     const author = this.users()?.find((user) => user.id === this.blogDetail()?.author);
@@ -31,5 +26,10 @@ export class BlogDetail {
       return author.email;
     }
     return 'Unknown Author';
+  }
+
+  authorInfo(authorId: number): string {
+    const user = this.users()?.find((user) => user.id === authorId);
+    return user ? user.email : 'Unknown Author';
   }
 }

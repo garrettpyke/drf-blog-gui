@@ -75,4 +75,9 @@ export class Blogs implements OnInit {
       subscription.unsubscribe();
     });
   }
+
+  authorInfo(authorId: number): string {
+    const user = this.users().find((user) => user.id === authorId);
+    return user ? user.email : 'Unknown Author';
+  }
 }

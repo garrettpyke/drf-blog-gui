@@ -12,3 +12,13 @@
 .blog-card-footer {
   padding: 16px;
 }
+
+.blog-card-footer mat-chip {
+  cursor: pointer;
+}
+
+.blog-card-footer mat-chip:hover,
+.blog-card-footer mat-chip:focus {
+  background-color: cornflowerblue;
+  cursor: grab;
+}

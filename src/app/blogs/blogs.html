@@ -1,9 +1,9 @@
 <!-- todo: move shared toolbar here -->
 <section>
   @if (blogClicked()) {
-  <app-blog-detail [blogDetail]="blogDetail()" />
+  <app-blog-detail [blogDetail]="blogDetail()" [users]="users()" />
   } @else { @for (blog of blogs(); track blog.id) {
-  <app-blog [blog]="blog" (click)="onClickBlog(blog.id)" />
+  <app-blog [blog]="blog" [author]="authorInfo(blog.author)" (click)="onClickBlog(blog.id)" />
   } @if (!blogs()) {
   <h5>Blogs not loaded...</h5>
   } }
