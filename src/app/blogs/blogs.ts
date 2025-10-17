@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal, output } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
 
 import { BlogApiService } from './blog-api.service';
 import { Blog } from './blog/blog';
@@ -13,11 +13,25 @@ import { BlogDetail } from './blog-detail/blog-detail';
 export class Blogs implements OnInit {
   isFetching = signal(false);
   blogClicked = signal<number | null>(null);
-  // blogSelected = signal<Blog | undefined>(undefined);
   private blogApiService = inject(BlogApiService);
   private destroyRef = inject(DestroyRef);
   blogs = this.blogApiService.loadedBlogs;
   blogDetail = signal(this.blogApiService.loadedBlogDetail());
+  users = computed(() => this.blogApiService.loadedAuthors());
+
+  constructor() {
+    // Initialize authors signal or any other setup if needed
+    const subscription = this.blogApiService.fetchAuthors().subscribe({
+      error: (error: Error) => {
+        console.error('Error loading authors:', error);
+      },
+      complete: () => {
+        console.log('Author loading completed');
+      },
+    });
+
+    this.destroyRef.onDestroy(() => subscription.unsubscribe());
+  }
 
   ngOnInit(): void {
     this.isFetching.set(true);

@@ -4,18 +4,23 @@
   margin: 5px auto 5px auto;
 }
 
-.content-card-title {
-  font-family: Roboto, sans-serif;
-}
-
-.content-card-footer {
-  padding: 8px;
-}
-
-.blog-card {
-  max-width: 90%;
+.comment-card {
+  background-color: forestgreen;
 }
 
 .comment-card-title {
   font-size: medium;
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.blog-card-title {
+  font-family: Roboto, sans-serif;
+  font-size: x-large;
+}
+
+.blog-card {
+  max-width: 90%;
+  background-color: dodgerblue;
 }

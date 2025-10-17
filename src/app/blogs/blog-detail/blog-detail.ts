@@ -1,4 +1,4 @@
-import { Component, input, computed, signal, inject, DestroyRef, OnInit } from '@angular/core';
+import { Component, input, computed, inject, DestroyRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -16,35 +16,14 @@ import { BlogApiService } from '../blog-api.service';
   templateUrl: './blog-detail.html',
   styleUrl: './blog-detail.css',
 })
-export class BlogDetail implements OnInit {
+export class BlogDetail {
   blogAppearance: MatCardAppearance = 'raised';
-  // commentAppearance: MatCardAppearance = 'filled';
   blogDetail = input<BlogDetailModel | undefined>();
   comments = computed(() => this.blogDetail()?.comments ?? []);
   private destroyRef = inject(DestroyRef);
   blogApiService = inject(BlogApiService);
-  users = signal<User[]>([]);
-
-  constructor() {
-    // Initialize authors signal or any other setup if needed
-    const subscription = this.blogApiService.fetchAuthors().subscribe({
-      error: (error: Error) => {
-        console.error('Error loading authors:', error);
-      },
-      complete: () => {
-        console.log('Author loading completed');
-        this.users.set(this.blogApiService.loadedAuthors());
-      },
-    });
-
-    this.destroyRef.onDestroy(() => subscription.unsubscribe());
-  }
-
-  ngOnInit(): void {
-    // this.authorsArray?.forEach((author) => {
-    //   console.log(author.email);
-    // });
-  }
+  // users = signal<User[]>([]);
+  users = computed(() => this.blogApiService.loadedAuthors());
 
   get authorEmail(): string {
     const author = this.users()?.find((user) => user.id === this.blogDetail()?.author);
