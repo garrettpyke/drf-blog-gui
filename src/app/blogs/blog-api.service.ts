@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, tap, map, throwError } from 'rxjs';
 
 import { type Blog } from './blog.model';
 import { type BlogDetail } from './blog-detail.model';
@@ -23,10 +23,12 @@ export class BlogApiService {
   private user = signal<User | undefined>(undefined);
   private blogs = signal<Blog[]>([]);
   private blogDetail = signal<BlogDetail | undefined>(undefined);
+  private users = signal<User[]>([]);
 
   currentUser = this.user.asReadonly();
   loadedBlogs = this.blogs.asReadonly();
   loadedBlogDetail = this.blogDetail.asReadonly();
+  loadedAuthors = this.users.asReadonly();
 
   constructor() {
     // todo: See [this link](https://medium.com/bb-tutorials-and-thoughts/retaining-state-of-the-angular-app-when-page-refresh-with-ngrx-6c486d3012a9)
@@ -152,6 +154,44 @@ export class BlogApiService {
             return throwError(() => new Error('Error fetching blog'));
           })
         );
+    }
+    return new Observable((observer) => {
+      observer.error('Token not found!');
+    });
+  }
+
+  fetchAuthors() {
+    const { token } = this.user()!;
+
+    if (token) {
+      return (
+        this.httpClient
+          //* Correct data typing here is important
+          .get<{ users: User[] }>(`http://localhost:8000/api/users/`, {
+            headers: {
+              Authorization: `token ${token}`,
+            },
+          })
+          .pipe(
+            map((respData) => {
+              this.users.set(respData.users), console.log(this.users());
+            })
+          )
+          // .pipe(
+          //   tap({
+          //     next: (users) => {
+          //       // console.log('fetchAuthors: ', users);
+          //       this.users.set(users);
+          //     },
+          //   })
+          // )
+          .pipe(
+            catchError((error) => {
+              console.log(error);
+              return throwError(() => new Error(`Error fetching authors: ${error.message}`));
+            })
+          )
+      );
     }
     return new Observable((observer) => {
       observer.error('Token not found!');
