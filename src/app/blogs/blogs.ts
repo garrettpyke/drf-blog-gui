@@ -1,12 +1,13 @@
-import { Component, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, computed, output } from '@angular/core';
 
-import { BlogApiService } from './blog-api.service';
+import { Toolbar } from '../shared/toolbar/toolbar';
 import { Blog } from './blog/blog';
 import { BlogDetail } from './blog-detail/blog-detail';
+import { BlogApiService } from './blog-api.service';
 
 @Component({
   selector: 'app-blogs',
-  imports: [Blog, BlogDetail],
+  imports: [Toolbar, Blog, BlogDetail],
   templateUrl: './blogs.html',
   styleUrl: './blogs.css',
 })
@@ -18,6 +19,7 @@ export class Blogs implements OnInit {
   blogs = this.blogApiService.loadedBlogs;
   blogDetail = signal(this.blogApiService.loadedBlogDetail());
   users = computed(() => this.blogApiService.loadedAuthors());
+  isAuthenticated = output<boolean>(); // todo next: label this consistently throughout components
 
   constructor() {
     // Initialize authors signal or any other setup if needed
@@ -79,5 +81,10 @@ export class Blogs implements OnInit {
   authorInfo(authorId: number): string {
     const user = this.users().find((user) => user.id === authorId);
     return user ? user.email : 'Unknown Author';
+  }
+
+  onLogout(isAuthenticated: boolean) {
+    console.log(`Authentication status event: ${isAuthenticated}`);
+    this.isAuthenticated.emit(false);
   }
 }

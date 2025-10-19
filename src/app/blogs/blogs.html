@@ -1,4 +1,5 @@
 <!-- todo: move shared toolbar here -->
+<app-toolbar (signedOn)="onLogout($event)" />
 <section>
   @if (blogClicked()) {
   <app-blog-detail [blogDetail]="blogDetail()" [users]="users()" />
