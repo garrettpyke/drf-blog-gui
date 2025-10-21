@@ -16,6 +16,7 @@ export class Toolbar {
   private blogApiService = inject(BlogApiService);
   private destroyRef = inject(DestroyRef);
   signedOn = output<boolean>(); //* EventEmitter<boolean>
+  newBlog = output<boolean>();
 
   onClickLogout() {
     const subscription = this.blogApiService.logout().subscribe({
@@ -33,6 +34,7 @@ export class Toolbar {
 
   onClickNewBlog() {
     console.log('New Blog clicked');
+    this.newBlog.emit(true);
     // Logic to open new blog dialog can be added here
   }
 }

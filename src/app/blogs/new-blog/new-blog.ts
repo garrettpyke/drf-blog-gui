@@ -15,7 +15,8 @@ import { BlogApiService } from '../blog-api.service';
   styleUrl: './new-blog.css',
 })
 export class NewBlog {
-  blogFormValid: boolean = false;
+  blogValid = false;
+  // cancel = false;
   title: string = '';
   content: string = '';
   category!: number;

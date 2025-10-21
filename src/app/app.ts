@@ -4,19 +4,18 @@ import { Component, signal, inject, OnChanges } from '@angular/core';
 import { Header } from './header/header';
 import { Login } from './login/login';
 import { Blogs } from './blogs/blogs';
-import { Toolbar } from './shared/toolbar/toolbar';
 import { BlogApiService, type User } from './blogs/blog-api.service';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Login, Blogs, Toolbar],
+  imports: [Header, Login, Blogs],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App implements OnChanges {
   protected readonly title = signal("Some guy's minimalist blog");
-  signedOn = signal<boolean>(false);
   private blogApiService = inject(BlogApiService);
+  signedOn = signal<boolean>(false);
   user = signal<User | undefined>(undefined);
 
   constructor() {

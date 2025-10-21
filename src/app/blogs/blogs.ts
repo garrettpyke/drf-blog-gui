@@ -3,11 +3,12 @@ import { Component, DestroyRef, inject, OnInit, signal, computed, output } from 
 import { Toolbar } from '../shared/toolbar/toolbar';
 import { Blog } from './blog/blog';
 import { BlogDetail } from './blog-detail/blog-detail';
+import { NewBlog } from './new-blog/new-blog';
 import { BlogApiService } from './blog-api.service';
 
 @Component({
   selector: 'app-blogs',
-  imports: [Toolbar, Blog, BlogDetail],
+  imports: [Toolbar, Blog, BlogDetail, NewBlog],
   templateUrl: './blogs.html',
   styleUrl: './blogs.css',
 })
@@ -20,6 +21,7 @@ export class Blogs implements OnInit {
   blogDetail = signal(this.blogApiService.loadedBlogDetail());
   users = computed(() => this.blogApiService.loadedAuthors());
   isAuthenticated = output<boolean>(); // todo next: label this consistently throughout components
+  newBlogSubmission = false;
 
   constructor() {
     // Initialize authors signal or any other setup if needed
@@ -36,7 +38,7 @@ export class Blogs implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isFetching.set(true);
+    this.isFetching.set(true); // todo: add elements to template to reflect this
 
     const subscription = this.blogApiService.loadBlogs().subscribe({
       error: (error: Error) => {
@@ -86,5 +88,12 @@ export class Blogs implements OnInit {
   onLogout(isAuthenticated: boolean) {
     console.log(`Authentication status event: ${isAuthenticated}`);
     this.isAuthenticated.emit(false);
+  }
+
+  onNewBlog() {
+    if (this.blogApiService.currentUser()) {
+      this.newBlogSubmission = true;
+    }
+    console.log('Ya gotta be logged in to post a new blog!');
   }
 }

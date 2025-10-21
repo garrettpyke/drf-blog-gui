@@ -1,5 +1,10 @@
-<!-- todo: move shared toolbar here -->
-<app-toolbar (signedOn)="onLogout($event)" />
+<!-- todo: disable new blog action in the toolbar if new blog in process -->
+<app-toolbar (signedOn)="onLogout($event)" (newBlog)="onNewBlog()" />
+
+@if (newBlogSubmission) {
+<app-new-blog />
+} @else {
+
 <section>
   @if (blogClicked()) {
   <app-blog-detail [blogDetail]="blogDetail()" [users]="users()" />
@@ -9,3 +14,4 @@
   <h5>Blogs not loaded...</h5>
   } }
 </section>
+}
