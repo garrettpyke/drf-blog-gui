@@ -1,7 +1,7 @@
-<!-- todo: disable new blog action in the toolbar if new blog in process -->
+<!-- todo: clean up conditionals, disable new blog action in the toolbar if new blog in process -->
+@if (!newBlogSubmission) {
 <app-toolbar (signedOn)="onLogout($event)" (newBlog)="onNewBlog()" />
-
-@if (newBlogSubmission) {
+} @if (newBlogSubmission) {
 <app-new-blog />
 } @else {
 

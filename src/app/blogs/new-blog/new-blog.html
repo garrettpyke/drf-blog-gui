@@ -1,4 +1,4 @@
-<div class="backdrop" (click)="onCancel()">
+<div id="backdrop" (click)="onCancel()">
   <dialog open>
     <h2>Create New Blog Post</h2>
     <form id="newBlogForm" (ngSubmit)="onSubmit()">
@@ -8,13 +8,18 @@
       <textarea id="content" name="content" [(ngModel)]="content" required></textarea>
       <label for="category">Category</label>
       <select id="category" name="category" [(ngModel)]="category">
-        <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+        <!-- <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option> -->
+        <option value="1">One</option>
+        <option value="2">Two</option>
       </select>
       <mat-divider />
-      <button matButton="elevated" color="primary" type="submit" [disabled]="!blogValid">
-        Create
-      </button>
-      <button mat-button type="button" (click)="onCancel()">Cancel</button>
+      <p></p>
+      <p id="actions">
+        <!-- <button matButton="elevated" color="primary" type="submit" [disabled]="!blogValid"> -->
+        <button type="submit" [disabled]="!blogValid">Create</button>
+        <!-- <button mat-button type="button" (click)="onCancel()">Cancel</button> -->
+        <button type="button" (click)="onCancel()">Cancel</button>
+      </p>
     </form>
   </dialog>
 </div>

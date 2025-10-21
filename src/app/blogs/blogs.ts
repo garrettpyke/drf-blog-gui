@@ -93,6 +93,8 @@ export class Blogs implements OnInit {
   onNewBlog() {
     if (this.blogApiService.currentUser()) {
       this.newBlogSubmission = true;
+      console.log(`blogs.onNewBlog(): ${this.blogApiService.currentUser()?.email}`);
+      return;
     }
     console.log('Ya gotta be logged in to post a new blog!');
   }
