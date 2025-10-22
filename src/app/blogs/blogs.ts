@@ -20,12 +20,14 @@ export class Blogs implements OnInit {
   blogs = this.blogApiService.loadedBlogs;
   blogDetail = signal(this.blogApiService.loadedBlogDetail());
   users = computed(() => this.blogApiService.loadedAuthors());
+  categories = computed(() => this.blogApiService.loadedCategories());
   isAuthenticated = output<boolean>(); // todo next: label this consistently throughout components
   newBlogSubmission = false;
 
   constructor() {
     // Initialize authors signal or any other setup if needed
-    const subscription = this.blogApiService.fetchAuthors().subscribe({
+    this.isFetching.set(true);
+    const authorSubscription = this.blogApiService.fetchAuthors().subscribe({
       error: (error: Error) => {
         console.error('Error loading authors:', error);
       },
@@ -33,8 +35,17 @@ export class Blogs implements OnInit {
         console.log('Author loading completed');
       },
     });
+    this.destroyRef.onDestroy(() => authorSubscription.unsubscribe());
 
-    this.destroyRef.onDestroy(() => subscription.unsubscribe());
+    const categorySubscription = this.blogApiService.fetchCategories().subscribe({
+      error: (error: Error) => {
+        console.error('Error loading categories', error);
+      },
+      complete: () => {
+        console.log('Category loading completed');
+        this.isFetching.set(false);
+      },
+    });
   }
 
   ngOnInit(): void {
@@ -45,7 +56,6 @@ export class Blogs implements OnInit {
         console.log(error);
       },
       complete: () => {
-        console.log('blogs.onInit fetching complete!');
         this.isFetching.set(false);
       },
     });

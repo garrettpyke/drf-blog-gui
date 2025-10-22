@@ -11,10 +11,12 @@ export interface User {
   email: string;
   token?: string;
 }
-export interface BlogsResponse {
-  // todo: revisit this in fetch operations
-  response: [blogs: Blog[], user: User];
-  // response: {blogs: Blog[], user: User};
+
+export interface Category {
+  id: number;
+  subject: string;
+  genre: string | null;
+  created_at: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -24,11 +26,13 @@ export class BlogApiService {
   private blogs = signal<Blog[]>([]);
   private blogDetail = signal<BlogDetail | undefined>(undefined);
   private users = signal<User[]>([]);
+  private categories = signal<Category[]>([]);
 
   currentUser = this.user.asReadonly();
   loadedBlogs = this.blogs.asReadonly();
   loadedBlogDetail = this.blogDetail.asReadonly();
   loadedAuthors = this.users.asReadonly();
+  loadedCategories = this.categories.asReadonly();
 
   constructor() {
     // todo: See [this link](https://medium.com/bb-tutorials-and-thoughts/retaining-state-of-the-angular-app-when-page-refresh-with-ngrx-6c486d3012a9)
@@ -41,6 +45,17 @@ export class BlogApiService {
 
   loadBlogs() {
     return this.fetchBlogs('http://localhost:8000/api/blogs/', 'Error loading blogs');
+  }
+
+  private verifyToken() {
+    // todo next: implement in all http functions
+    const { token } = this.user()!;
+    if (token) {
+      return token;
+    }
+    return new Observable((observer) => {
+      observer.error('Token not found!');
+    });
   }
 
   private refreshToken(email: string, password: string) {
@@ -174,7 +189,7 @@ export class BlogApiService {
           })
           .pipe(
             map((respData) => {
-              this.users.set(respData.users), console.log(this.users());
+              this.users.set(respData.users); // , console.log(this.users())
             })
           )
           .pipe(
@@ -188,5 +203,50 @@ export class BlogApiService {
     return new Observable((observer) => {
       observer.error('Token not found!');
     });
+  }
+
+  fetchCategories() {
+    const tokenResponse = this.verifyToken();
+
+    if (typeof tokenResponse === 'string') {
+      return this.httpClient
+        .get<{ categories: Category[] }>('http://localhost:8000/api/categories/', {
+          headers: {
+            Authorization: `token ${tokenResponse}`,
+          },
+        })
+        .pipe(
+          map((respData) => {
+            this.categories.set(respData.categories);
+          })
+        )
+        .pipe(
+          catchError((error) => {
+            console.log(error);
+            return throwError(() => new Error(`Error fetching categories: ${error.message}`));
+          })
+        );
+    }
+
+    return tokenResponse;
+  }
+
+  postNewBlog(blog: Blog) {
+    const tokenResponse = this.verifyToken();
+    if (typeof tokenResponse === 'string') {
+      return this.httpClient.post('http://localhost:8000/api/blogs/', {
+        headers: {
+          Authorization: `token ${tokenResponse}`,
+        },
+        body: {},
+      });
+    }
+    return tokenResponse;
+
+    //     {
+    //   "title": "King Missile",
+    //   "category": 5,
+    //   "content": "Happy Hour"
+    // }
   }
 }

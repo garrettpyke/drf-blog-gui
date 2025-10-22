@@ -2,7 +2,7 @@
 @if (!newBlogSubmission) {
 <app-toolbar (signedOn)="onLogout($event)" (newBlog)="onNewBlog()" />
 } @if (newBlogSubmission) {
-<app-new-blog />
+<app-new-blog [categories]="categories()" />
 } @else {
 
 <section>

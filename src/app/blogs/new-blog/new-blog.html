@@ -7,10 +7,12 @@
       <label for="content">Content</label>
       <textarea id="content" name="content" [(ngModel)]="content" required></textarea>
       <label for="category">Category</label>
-      <select id="category" name="category" [(ngModel)]="category">
-        <!-- <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option> -->
-        <option value="1">One</option>
-        <option value="2">Two</option>
+      <select id="category" name="category" default="1" [(ngModel)]="category">
+        @for (cat of categories(); track cat.id ) {
+        <option [value]="cat.id">
+          {{ cat.subject }} @if (cat.genre) { {{ ' (' + cat.genre + ')' }} }
+        </option>
+        }
       </select>
       <mat-divider />
       <p></p>
