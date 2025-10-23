@@ -1,10 +1,11 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, tap, map, throwError } from 'rxjs';
 
 import { type Blog } from './blog.model';
 import { type BlogDetail } from './blog-detail.model';
 import { type Comment } from '../comments/comment.model';
+import { type NewBlogModel } from './new-blog/new-blog';
 
 export interface User {
   id: number;
@@ -47,9 +48,11 @@ export class BlogApiService {
     return this.fetchBlogs('http://localhost:8000/api/blogs/', 'Error loading blogs');
   }
 
-  private verifyToken() {
+  verifyToken() {
+    // todo: make private!
     // todo next: implement in all http functions
     const { token } = this.user()!;
+    console.log(`apiService:verifyToken: ${token}`);
     if (token) {
       return token;
     }
@@ -80,6 +83,15 @@ export class BlogApiService {
           return throwError(() => new Error('Sign-on error!'));
         })
       );
+  }
+
+  private buildHttpHeaders(token: string) {
+    // todo: use where appropriate
+    return {
+      headers: new HttpHeaders({
+        Authorization: `token ${token}`,
+      }),
+    };
   }
 
   login(email: string, password: string) {
@@ -231,22 +243,27 @@ export class BlogApiService {
     return tokenResponse;
   }
 
-  postNewBlog(blog: Blog) {
+  postNewBlog(blog: NewBlogModel) {
     const tokenResponse = this.verifyToken();
+
     if (typeof tokenResponse === 'string') {
-      return this.httpClient.post('http://localhost:8000/api/blogs/', {
-        headers: {
-          Authorization: `token ${tokenResponse}`,
-        },
-        body: {},
-      });
+      const httpHeaders = this.buildHttpHeaders(tokenResponse);
+
+      return this.httpClient
+        .post('http://localhost:8000/api/blogs/', blog, httpHeaders)
+        .pipe(
+          tap({
+            next: (respData) => {
+              console.log(respData);
+            },
+          })
+        )
+        .pipe(
+          catchError((error) => {
+            return throwError(() => new Error('Failed to post this blog. Please try again.'));
+          })
+        );
     }
     return tokenResponse;
-
-    //     {
-    //   "title": "King Missile",
-    //   "category": 5,
-    //   "content": "Happy Hour"
-    // }
   }
 }
