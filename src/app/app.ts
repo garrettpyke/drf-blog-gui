@@ -1,5 +1,5 @@
 import { Component, signal, inject, OnChanges } from '@angular/core';
-// import { RouterOutlet } from '@angular/router';
+// import { RouterOutlet } from '@angular/router'; // todo: implement
 
 import { Header } from './header/header';
 import { Login } from './login/login';

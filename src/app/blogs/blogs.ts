@@ -65,6 +65,12 @@ export class Blogs implements OnInit {
     });
   }
 
+  ngDoCheck(): void {
+    //Called every time that the input properties of a component or a directive are checked. Use it to extend change detection by performing a custom check.
+    //Add 'implements DoCheck' to the class.
+    console.log('Blogs.ngDoCheck triggered!!!!!');
+  }
+
   onClickBlog(id: number) {
     const subscription = this.blogApiService.fetchBlogDetail(id).subscribe({
       // next: (blog) => {
@@ -92,20 +98,23 @@ export class Blogs implements OnInit {
 
   authorInfo(authorId: number): string {
     const user = this.users().find((user) => user.id === authorId);
-    return user ? user.email : 'Unknown Author';
+    return user?.email || 'Author not found!';
   }
 
   onLogout(isAuthenticated: boolean) {
-    console.log(`Authentication status event: ${isAuthenticated}`);
+    // console.log(`Authentication status event: ${isAuthenticated}`);
     this.isAuthenticated.emit(false);
   }
 
   onNewBlog() {
     if (this.blogApiService.currentUser()) {
       this.newBlogSubmission = true;
-      console.log(`blogs.onNewBlog(): ${this.blogApiService.currentUser()?.email}`);
       return;
     }
-    console.log('Ya gotta be logged in to post a new blog!');
+    console.log('Ya gotta be logged in to post a new blog!'); // todo
+  }
+
+  onClose() {
+    this.newBlogSubmission = false;
   }
 }

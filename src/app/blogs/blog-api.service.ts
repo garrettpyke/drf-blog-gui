@@ -50,7 +50,7 @@ export class BlogApiService {
 
   verifyToken() {
     // todo: make private!
-    // todo next: implement in all http functions
+    // todo next: implement in all http functions + general clean up
     const { token } = this.user()!;
     console.log(`apiService:verifyToken: ${token}`);
     if (token) {

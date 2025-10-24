@@ -1,10 +1,10 @@
-<!-- todo: clean up conditionals, disable new blog action in the toolbar if new blog in process -->
-@if (!newBlogSubmission) {
-<app-toolbar (signedOn)="onLogout($event)" (newBlog)="onNewBlog()" />
-} @if (newBlogSubmission) {
-<app-new-blog [categories]="categories()" />
+@if (newBlogSubmission) {
+<app-new-blog [categories]="categories()" (close)="onClose()" />
+<!-- <app-new-blog [categories]="categories()" /> -->
+
 } @else {
 
+<app-toolbar (signedOn)="onLogout($event)" (newBlog)="onNewBlog()" />
 <section>
   @if (blogClicked()) {
   <app-blog-detail [blogDetail]="blogDetail()" [users]="users()" />

@@ -1,22 +1,25 @@
-#backdrop {
-  background-color: lightsteelblue;
+.backdrop-div {
   position: fixed;
-  top: 100;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
 }
 
-#newBlogForm {
-  width: 100%;
+.newBlogForm {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  position: relative;
+}
+
+.newBlogForm::backdrop {
+  /* this pseudo-element could be used to blur, darken, or otherwise obfuscate the inert content behind the modal dialog */
 }
 
 dialog {
   width: 90%;
-  max-width: 30rem;
+  max-width: 70%;
   background-color: dodgerblue;
   border-radius: 6px;
   border: none;
