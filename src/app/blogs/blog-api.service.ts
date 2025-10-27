@@ -250,11 +250,11 @@ export class BlogApiService {
       const httpHeaders = this.buildHttpHeaders(tokenResponse);
 
       return this.httpClient
-        .post('http://localhost:8000/api/blogs/', blog, httpHeaders)
+        .post<Blog>('http://localhost:8000/api/blogs/', blog, httpHeaders)
         .pipe(
           tap({
-            next: (respData) => {
-              console.log(respData);
+            next: (blog) => {
+              this.blogs.update((blogs) => [...blogs, blog]);
             },
           })
         )
