@@ -6,8 +6,7 @@ import { MatDividerModule } from '@angular/material/divider';
 // import { MatSelect } from '@angular/material/select';
 // import { MatInputModule } from '@angular/material/input';
 
-import { BlogApiService, type Category, type User } from '../blog-api.service';
-// import { type Blog } from '../blog.model';
+import { BlogApiService, type Category } from '../blog-api.service';
 export interface NewBlogModel {
   title: string;
   content: string;
@@ -75,17 +74,14 @@ export class NewBlog {
     } else {
       console.log('Could not validate new blog.');
     }
-
-    // todo next #1: listen for an event in blogs after a successful post.
-    // todo: pop-up error message if form issues or use `(ngModelChange)="onFieldChange()"`
   }
 
   onCancel() {
     this.close.emit();
   }
 
-  onFieldChange() {
-    // todo next #2: make sure this is necessary. the required option may be all we need.
+  onFieldChange(field: any) {
     this.blogValid = (this.blogApiService.currentUser()?.id && this.title && this.content) || false;
+    console.log(field);
   }
 }
