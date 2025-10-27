@@ -65,12 +65,6 @@ export class Blogs implements OnInit {
     });
   }
 
-  ngDoCheck(): void {
-    //Called every time that the input properties of a component or a directive are checked. Use it to extend change detection by performing a custom check.
-    //Add 'implements DoCheck' to the class.
-    console.log('Blogs.ngDoCheck triggered!!!!!');
-  }
-
   onClickBlog(id: number) {
     const subscription = this.blogApiService.fetchBlogDetail(id).subscribe({
       // next: (blog) => {

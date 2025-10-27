@@ -22,7 +22,7 @@ export interface NewBlogModel {
 })
 export class NewBlog {
   close = output<void>();
-  // blogValid = false;
+  blogValid = false;
   title = '';
   content = '';
   category!: number;
@@ -30,7 +30,6 @@ export class NewBlog {
   categories = input<Category[]>();
   blogApiService = inject(BlogApiService);
   destroyRef = inject(DestroyRef);
-  blogValid = (this.blogApiService.currentUser()?.id && this.title && this.content) || false;
 
   private validateBlog(): boolean {
     const { id, email, token } = this.blogApiService.currentUser()!;
@@ -81,7 +80,8 @@ export class NewBlog {
   }
 
   onFieldChange(field: any) {
-    this.blogValid = (this.blogApiService.currentUser()?.id && this.title && this.content) || false;
-    console.log(field);
+    if (this.blogApiService.currentUser()?.id && this.title && this.content) {
+      this.blogValid = true;
+    }
   }
 }
