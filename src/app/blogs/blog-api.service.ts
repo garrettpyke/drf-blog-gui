@@ -71,7 +71,6 @@ export class BlogApiService {
         tap({
           next: (respData) => {
             // console.log(respData.user);
-            // this.user = respData.user;
             this.user.set(respData.user);
             localStorage.setItem('blog_user', JSON.stringify(respData.user));
           },
@@ -167,6 +166,7 @@ export class BlogApiService {
         .pipe(
           tap({
             next: (respData) => {
+              // todo: correct typing
               console.log(`fetchBlogDetail: ${respData[0]}`);
               this.blogDetail.set({
                 ...respData[0],
