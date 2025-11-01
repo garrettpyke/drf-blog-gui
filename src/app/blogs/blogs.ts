@@ -96,14 +96,6 @@ export class Blogs implements OnInit {
     return user?.email || 'Author not found!';
   }
 
-  // get category(): Category | undefined {
-  //   const blogDetail = this.blogDetail();
-  //   if (blogDetail) {
-  //     return this.categories().find((cat) => cat.id === blogDetail.category);
-  //   }
-  //   return undefined;
-  // }
-
   getFullCategory(categoryId: number): Category | undefined {
     const category = this.categories().find((cat) => cat.id === categoryId);
     // return category ? category.subject : 'Unknown Category';

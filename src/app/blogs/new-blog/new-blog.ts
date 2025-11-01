@@ -36,7 +36,6 @@ export class NewBlog {
     console.log(`validateBlog().token: ${token}`);
     console.log(`validateBlog().id: ${id}`);
     console.log(`validateBlog().email: ${email}`);
-    this.blogApiService.verifyToken();
 
     if (id && this.title && this.content) {
       this.newBlog = {

@@ -48,11 +48,8 @@ export class BlogApiService {
     return this.fetchBlogs('http://localhost:8000/api/blogs/', 'Error loading blogs');
   }
 
-  verifyToken() {
-    // todo: make private!
-    // todo next: implement in all http functions + general clean up
+  private verifyToken() {
     const { token } = this.user()!;
-    console.log(`apiService:verifyToken: ${token}`);
     if (token) {
       return token;
     }
@@ -85,7 +82,6 @@ export class BlogApiService {
   }
 
   private buildHttpHeaders(token: string) {
-    // todo: use where appropriate
     return {
       headers: new HttpHeaders({
         Authorization: `token ${token}`,
@@ -97,14 +93,14 @@ export class BlogApiService {
     return this.refreshToken(email, password);
   }
 
-  logout(): Observable<{} | string> {
-    const token = this.user()!.token;
+  logout(): Observable<any> {
+    const tokenResponse = this.verifyToken();
 
-    if (token) {
+    if (typeof tokenResponse === 'string') {
       return this.httpClient
         .delete('http://localhost:8000/api/sign-out/', {
           headers: {
-            Authorization: `token ${token}`,
+            Authorization: `token ${tokenResponse}`,
           },
         })
         .pipe(
@@ -115,21 +111,19 @@ export class BlogApiService {
             },
           })
         );
-    } else {
-      return new Observable((observer) => {
-        observer.error('Token not found!');
-      });
     }
+
+    return tokenResponse;
   }
 
-  private fetchBlogs(url: string, errMessage: string): Observable<{} | string> {
-    const token = this.user()!.token;
+  private fetchBlogs(url: string, errMessage: string): Observable<any> {
+    const tokenResponse = this.verifyToken();
 
-    if (token) {
+    if (typeof tokenResponse === 'string') {
       return this.httpClient
         .get<[Blog[], User]>(url, {
           headers: {
-            Authorization: `token ${token}`,
+            Authorization: `token ${tokenResponse}`,
           },
         })
         .pipe(
@@ -148,26 +142,26 @@ export class BlogApiService {
           })
         );
     }
-    return new Observable((observer) => {
-      observer.error('Token not found!');
-    });
+
+    return tokenResponse;
   }
 
   fetchBlogDetail(id: number) {
-    const token = this.user()!.token;
+    const tokenResponse = this.verifyToken();
 
-    if (token) {
+    if (typeof tokenResponse === 'string') {
       return this.httpClient
         .get<[Blog, Comment[]]>(`http://localhost:8000/api/blog/${id}/`, {
           headers: {
-            Authorization: `token ${token}`,
+            Authorization: `token ${tokenResponse}`,
           },
         })
         .pipe(
           tap({
             next: (respData) => {
               // todo: correct typing
-              console.log(`fetchBlogDetail: ${respData[0]}`);
+              // console.log(`fetchBlogDetail.1: ${Blog}`);
+              console.log(`fetchBlogDetail.2: ${respData[0]}`);
               this.blogDetail.set({
                 ...respData[0],
                 comments: respData[1],
@@ -182,21 +176,20 @@ export class BlogApiService {
           })
         );
     }
-    return new Observable((observer) => {
-      observer.error('Token not found!');
-    });
+
+    return tokenResponse;
   }
 
   fetchAuthors() {
-    const { token } = this.user()!;
+    const tokenResponse = this.verifyToken();
 
-    if (token) {
+    if (typeof tokenResponse === 'string') {
       return (
         this.httpClient
           //* Correct data typing here is important
           .get<{ users: User[] }>(`http://localhost:8000/api/users/`, {
             headers: {
-              Authorization: `token ${token}`,
+              Authorization: `token ${tokenResponse}`,
             },
           })
           .pipe(
@@ -212,9 +205,8 @@ export class BlogApiService {
           )
       );
     }
-    return new Observable((observer) => {
-      observer.error('Token not found!');
-    });
+
+    return tokenResponse;
   }
 
   fetchCategories() {

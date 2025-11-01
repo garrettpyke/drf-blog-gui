@@ -7,7 +7,7 @@ export interface BlogDetail {
   category: number;
   author: number;
   updated_at: string;
-  uri: string;
-  votes: number;
+  // uri: string;
+  // votes: number;
   comments: Comment[];
 }
