@@ -69,7 +69,6 @@ export class NewBlog {
         },
       });
       this.destroyRef.onDestroy(() => subscription.unsubscribe());
-      // this.close.emit();
     } else {
       console.log('Could not validate new blog.');
     }

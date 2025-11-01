@@ -5,6 +5,7 @@ import { Blog } from './blog/blog';
 import { BlogDetail } from './blog-detail/blog-detail';
 import { NewBlog } from './new-blog/new-blog';
 import { BlogApiService } from './blog-api.service';
+import { type Category } from './blog-api.service';
 
 @Component({
   selector: 'app-blogs',
@@ -93,6 +94,20 @@ export class Blogs implements OnInit {
   authorInfo(authorId: number): string {
     const user = this.users().find((user) => user.id === authorId);
     return user?.email || 'Author not found!';
+  }
+
+  // get category(): Category | undefined {
+  //   const blogDetail = this.blogDetail();
+  //   if (blogDetail) {
+  //     return this.categories().find((cat) => cat.id === blogDetail.category);
+  //   }
+  //   return undefined;
+  // }
+
+  getFullCategory(categoryId: number): Category | undefined {
+    const category = this.categories().find((cat) => cat.id === categoryId);
+    // return category ? category.subject : 'Unknown Category';
+    return category || undefined;
   }
 
   onLogout(isAuthenticated: boolean) {

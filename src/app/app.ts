@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnChanges } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 // import { RouterOutlet } from '@angular/router'; // todo: implement
 
 import { Header } from './header/header';
@@ -12,26 +12,22 @@ import { BlogApiService, type User } from './blogs/blog-api.service';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements OnChanges {
+export class App {
   protected readonly title = signal("Some guy's minimalist blog");
   private blogApiService = inject(BlogApiService);
   signedOn = signal<boolean>(false);
   user = signal<User | undefined>(undefined);
 
   constructor() {
-    console.log(`constructor, current user: ${this.user()?.email}`);
+    // console.log(`constructor, current user: ${this.user()?.email}`);
     this.user.set(this.blogApiService.currentUser());
     if (this.user()) {
       this.signedOn.set(true);
     }
   }
 
-  ngOnChanges() {
-    console.log(`app.ts OnChanges, current user: ${this.user()?.email}`);
-  }
-
   onIsAuthenticated(isAuthenticated: boolean) {
-    console.log(`Authentication status event: ${isAuthenticated}`);
+    // console.log(`Authentication status event: ${isAuthenticated}`);
     this.signedOn.update(() => isAuthenticated);
   }
 }

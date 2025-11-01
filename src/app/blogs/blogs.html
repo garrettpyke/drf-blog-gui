@@ -6,9 +6,18 @@
 <app-toolbar (signedOn)="onLogout($event)" (newBlog)="onNewBlog()" />
 <section>
   @if (blogClicked()) {
-  <app-blog-detail [blogDetail]="blogDetail()" [users]="users()" />
+  <app-blog-detail
+    [blogDetail]="blogDetail()"
+    [users]="users()"
+    [category]="getFullCategory(blogDetail()!.category)"
+  />
   } @else { @for (blog of blogs(); track blog.id) {
-  <app-blog [blog]="blog" [author]="authorInfo(blog.author)" (click)="onClickBlog(blog.id)" />
+  <app-blog
+    [blog]="blog"
+    [author]="authorInfo(blog.author)"
+    [category]="getFullCategory(blog.category)"
+    (click)="onClickBlog(blog.id)"
+  />
   } @if (!blogs()) {
   <h5>Blogs not loaded...</h5>
   } }

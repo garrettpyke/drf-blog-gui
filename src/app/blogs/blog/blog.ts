@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 type MatCardAppearance = 'outlined' | 'raised' | 'filled';
 
 import { type Blog as BlogModel } from '../blog.model';
+import { type Category } from '../blog-api.service';
 
 @Component({
   selector: 'app-blog',
@@ -16,6 +17,7 @@ import { type Blog as BlogModel } from '../blog.model';
 export class Blog {
   blog = input.required<BlogModel>();
   author = input.required<string>();
+  category = input<Category | undefined>();
   appearance: MatCardAppearance = 'raised';
 
   get totalVotes(): number {
@@ -25,4 +27,8 @@ export class Blog {
   title: any = computed(() => {
     return this.blog().title;
   });
+
+  get categorySubject(): string {
+    return this.category()?.subject || 'Uncategorized';
+  }
 }

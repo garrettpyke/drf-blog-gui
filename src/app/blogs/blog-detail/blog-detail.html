@@ -7,6 +7,7 @@
   </mat-card-header>
   <mat-card-content>
     <h3>{{ blogDetail()!.content }}</h3>
+    <h4>{{ categorySubject }}</h4>
     <p>{{ authorEmail }}</p>
     <p>{{ blogDetail()!.updated_at | date : 'medium' }}</p>
   </mat-card-content>

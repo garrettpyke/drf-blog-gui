@@ -7,6 +7,7 @@ type MatCardAppearance = 'outlined' | 'raised' | 'filled';
 
 import { Comment } from '../../comments/comment/comment';
 import { type BlogDetail as BlogDetailModel } from '../blog-detail.model';
+import { type Category } from '../blog-api.service';
 
 @Component({
   selector: 'app-blog-detail',
@@ -15,9 +16,10 @@ import { type BlogDetail as BlogDetailModel } from '../blog-detail.model';
   styleUrl: './blog-detail.css',
 })
 export class BlogDetail {
-  blogDetail = input<BlogDetailModel | undefined>();
-  users = input<{ id: number; email: string }[] | undefined>();
+  blogDetail = input.required<BlogDetailModel | undefined>();
+  users = input.required<{ id: number; email: string }[] | undefined>();
   comments = computed(() => this.blogDetail()?.comments ?? []);
+  category = input<Category | undefined>();
   blogAppearance: MatCardAppearance = 'raised';
 
   get authorEmail(): string {
@@ -26,6 +28,10 @@ export class BlogDetail {
       return author.email;
     }
     return 'Unknown Author';
+  }
+
+  get categorySubject(): string {
+    return this.category()?.subject || 'Uncategorized';
   }
 
   authorInfo(authorId: number): string {

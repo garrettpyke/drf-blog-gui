@@ -4,6 +4,7 @@
   </mat-card-header>
   <mat-card-content>
     <p>{{ blog().content }}</p>
+    <p>Category: {{ categorySubject }}</p>
     <p>{{ author() }}</p>
     <p>Total Votes: {{ totalVotes }}</p>
     <p>{{ blog().updated_at | date : 'medium' }}</p>
