@@ -20,6 +20,9 @@ export interface Category {
   created_at: string;
 }
 
+// PATCH http://localhost:8000/api/blog/6/ HTTP/1.1 "title", "content", "category"
+// DELETE http://localhost:8000/api/blog/6/ HTTP/1.1
+
 @Injectable({ providedIn: 'root' })
 export class BlogApiService {
   private httpClient = inject(HttpClient);
@@ -71,13 +74,13 @@ export class BlogApiService {
             this.user.set(respData.user);
             localStorage.setItem('blog_user', JSON.stringify(respData.user));
           },
-        })
+        }),
       )
       .pipe(
         catchError((error) => {
           console.log(error);
           return throwError(() => new Error('Sign-on error!'));
-        })
+        }),
       );
   }
 
@@ -109,7 +112,7 @@ export class BlogApiService {
               this.user.set(undefined);
               localStorage.removeItem('blog_user');
             },
-          })
+          }),
         );
     }
 
@@ -133,13 +136,13 @@ export class BlogApiService {
               this.blogs.set(respData[0]);
               console.log(this.blogs());
             },
-          })
+          }),
         )
         .pipe(
           catchError((error) => {
             console.log(error);
             return throwError(() => new Error(errMessage));
-          })
+          }),
         );
     }
 
@@ -167,13 +170,13 @@ export class BlogApiService {
                 comments: respData[1],
               });
             },
-          })
+          }),
         )
         .pipe(
           catchError((error) => {
             console.log(error);
             return throwError(() => new Error('Error fetching blog'));
-          })
+          }),
         );
     }
 
@@ -195,13 +198,13 @@ export class BlogApiService {
           .pipe(
             map((respData) => {
               this.users.set(respData.users); // , console.log(this.users())
-            })
+            }),
           )
           .pipe(
             catchError((error) => {
               console.log(error);
               return throwError(() => new Error(`Error fetching authors: ${error.message}`));
-            })
+            }),
           )
       );
     }
@@ -222,13 +225,13 @@ export class BlogApiService {
         .pipe(
           map((respData) => {
             this.categories.set(respData.categories);
-          })
+          }),
         )
         .pipe(
           catchError((error) => {
             console.log(error);
             return throwError(() => new Error(`Error fetching categories: ${error.message}`));
-          })
+          }),
         );
     }
 
@@ -248,14 +251,15 @@ export class BlogApiService {
             next: (blog) => {
               this.blogs.update((blogs) => [...blogs, blog]);
             },
-          })
+          }),
         )
         .pipe(
           catchError((error) => {
             return throwError(() => new Error('Failed to post this blog. Please try again.'));
-          })
+          }),
         );
     }
+
     return tokenResponse;
   }
 }

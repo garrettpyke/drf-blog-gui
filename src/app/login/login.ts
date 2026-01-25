@@ -17,6 +17,8 @@ export class Login {
   isAuthenticated = output<boolean>();
 
   onSubmit() {
+    // todo: first: If token expired, need to refresh token instead of re-login! Otherwise application cache must
+    // todo: ...be cleared and user re-authenticated.
     // todo: add error handling
     const subscription = this.blogApiService.login(this.enteredUserEmail, this.password).subscribe({
       complete: () => {

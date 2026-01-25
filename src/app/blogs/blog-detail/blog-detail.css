@@ -4,6 +4,19 @@
   margin: 5px auto 5px auto;
 }
 
+.content-card-footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.content-card-footer-votes {
+  align-self: flex-start;
+}
+
+.content-card-footer-actions {
+  align-self: flex-end;
+}
+
 .comment-card {
   background-color: forestgreen;
 }

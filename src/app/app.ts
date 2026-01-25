@@ -20,6 +20,7 @@ export class App {
 
   constructor() {
     // console.log(`constructor, current user: ${this.user()?.email}`);
+    // console.log(`App component signedOn: ${this.signedOn()}`);
     this.user.set(this.blogApiService.currentUser());
     if (this.user()) {
       this.signedOn.set(true);
