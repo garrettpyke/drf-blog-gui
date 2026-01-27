@@ -24,6 +24,7 @@ export class Blogs implements OnInit {
   categories = computed(() => this.blogApiService.loadedCategories());
   isAuthenticated = output<boolean>(); // todo next: label this consistently throughout components
   newBlogSubmission = false;
+  updateBlog = false;
 
   constructor() {
     // Initialize authors signal or any other setup if needed
@@ -115,6 +116,7 @@ export class Blogs implements OnInit {
     console.log('Ya gotta be logged in to post a new blog!'); // todo
   }
 
+  // todo: Confirm dialog
   // todo: enable this function or service to proactively notify user of response status code or message from backend
   // perhaps via snackbar or dialog
   onDeleteBlog(deleteBlog: boolean) {
@@ -145,4 +147,36 @@ export class Blogs implements OnInit {
   onClose() {
     this.newBlogSubmission = false;
   }
+
+  onUpdateBlog(updateBlog: boolean) {
+    if (this.blogApiService.currentUser()) {
+      this.updateBlog = true;
+      return;
+    }
+    console.log('Ya gotta be logged in to update a blog!'); // todo
+  }
+
+  // todo: try using partial as so: onUpdateBlog(updateBlog: Partial<Blog>) {
+  // onUpdateBlog(updateBlog: <Blog>) {
+  //   if (updateBlog) {
+  //     const blogId = this.blogClicked();
+  //     if (blogId !== null) {
+  //       const subscription = this.blogApiService.updateBlog(blogId, updateBlog).subscribe({
+  //         error: (error: Error) => {
+  //           console.error('Error updating blog:', error.message);
+  //         },
+  //         complete: () => {
+  //           console.log(`Blog with ID ${blogId} updated successfully.`);
+  //           this.blogDetail.set(this.blogApiService.loadedBlogDetail());
+  //         },
+  //       });
+  //       this.destroyRef.onDestroy(() => {
+  //         subscription.unsubscribe();
+  //       });
+  //     }
+
+  //     this.blogClicked.set(null);
+  //     this.blogDetail.set(undefined);
+  //   }
+  // }
 }

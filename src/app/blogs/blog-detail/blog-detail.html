@@ -18,8 +18,8 @@
       <mat-chip><mat-icon>sentiment_very_dissatisfied</mat-icon></mat-chip>
     </mat-chip-set>
     <mat-chip-set class="content-card-footer-actions" aria-label="Blog actions">
-      <mat-chip><mat-icon>mode_edit</mat-icon></mat-chip>
       @if (user().id === author.id) {
+        <mat-chip (click)="onClickUpdateBlog()"><mat-icon>mode_edit</mat-icon></mat-chip>
         <mat-chip (click)="onClickDeleteBlog()"><mat-icon>delete</mat-icon></mat-chip>
       }
     </mat-chip-set>

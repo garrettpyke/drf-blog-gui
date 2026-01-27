@@ -22,6 +22,7 @@ export class BlogDetail {
   category = input<Category | undefined>();
   blogAppearance: MatCardAppearance = 'raised';
   deleteBlog = output<boolean>();
+  updateBlog = output<boolean>();
   private blogApiService = inject(BlogApiService);
   user = computed<User>(() => this.blogApiService.currentUser()!);
 
@@ -45,6 +46,10 @@ export class BlogDetail {
   onClickDeleteBlog() {
     console.log('Delete Blog clicked');
     this.deleteBlog.emit(true);
-    // Logic to handle blog deletion can be added here
+  }
+
+  onClickUpdateBlog() {
+    console.log('Update Blog clicked');
+    this.updateBlog.emit(true);
   }
 }

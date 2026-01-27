@@ -260,6 +260,7 @@ export class BlogApiService {
     return tokenResponse;
   }
 
+  // todo: this can result in a 204, 403 or other 400x error.
   deleteBlog(id: number) {
     const tokenResponse = this.verifyToken();
 
@@ -300,4 +301,35 @@ export class BlogApiService {
   }
 
   // PATCH http://localhost:8000/api/blog/6/ HTTP/1.1 "title", "content", "category"
+  // todo: This can result in a 401 error or a new blog!
+  // todo: updateBlog(id: number, updatedFields: Partial<Blog>) {
+  // updateBlog(id: number, updatedBlog: <Blog>) {
+  //   const tokenResponse = this.verifyToken();
+
+  //   if (typeof tokenResponse === 'string') {
+  //     let errorMsg = 'An error occurred during blog patch process!';
+
+  //     return this.httpClient
+  //       .patch<Blog>(`http://localhost:8000/api/blog/${id}`, updatedBlog, {
+  //         headers: {
+  //           Authorization: `token ${tokenResponse}`,
+  //         },
+  //         observe: 'response',
+  //       })
+  //       .pipe(
+  //         tap({
+  //           next: (blog) => {
+  //             this.blogs.update((blogs) => [...blogs, blog]);
+  //           },
+  //         }),
+  //       )
+  //       .pipe(
+  //         catchError((error) => {
+  //           return throwError(() => new Error(error.message || errorMsg));
+  //         }),
+  //       );
+  //   }
+
+  //   return tokenResponse;
+  // }
 }
