@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { catchError, Observable, tap, map, throwError } from 'rxjs';
 
 import { type Blog } from './blog.model';
@@ -19,9 +19,6 @@ export interface Category {
   genre: string | null;
   created_at: string;
 }
-
-// PATCH http://localhost:8000/api/blog/6/ HTTP/1.1 "title", "content", "category"
-// DELETE http://localhost:8000/api/blog/6/ HTTP/1.1
 
 @Injectable({ providedIn: 'root' })
 export class BlogApiService {
@@ -262,4 +259,45 @@ export class BlogApiService {
 
     return tokenResponse;
   }
+
+  deleteBlog(id: number) {
+    const tokenResponse = this.verifyToken();
+
+    if (typeof tokenResponse === 'string') {
+      let errorMsg = 'Unknown error occurred during blog deletion.';
+
+      return this.httpClient
+        .delete<any>(`http://localhost:8000/api/blog/${id}/`, {
+          headers: {
+            Authorization: `token ${tokenResponse}`,
+          },
+          observe: 'response',
+        })
+        .pipe(
+          tap({
+            next: (response: HttpResponse<any>) => {
+              if (response.status === HttpStatusCode.NoContent) {
+                console.log(`Blog with ID ${id} deleted successfully on server.`);
+                this.blogs.update((blogs) => blogs.filter((blog) => blog.id !== id));
+              } else if (response.status === HttpStatusCode.Forbidden) {
+                errorMsg = 'You do not have permission to delete this blog.';
+                console.log(errorMsg);
+              } else {
+                errorMsg = `Unexpected response status: ${response.status}`;
+                console.error(errorMsg);
+              }
+            },
+          }),
+        )
+        .pipe(
+          catchError((error) => {
+            return throwError(() => new Error(error.message || errorMsg));
+          }),
+        );
+    }
+
+    return tokenResponse;
+  }
+
+  // PATCH http://localhost:8000/api/blog/6/ HTTP/1.1 "title", "content", "category"
 }

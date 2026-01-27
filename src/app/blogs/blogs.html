@@ -1,25 +1,27 @@
 @if (newBlogSubmission) {
-<app-new-blog [categories]="categories()" (close)="onClose()" />
-
+  <app-new-blog [categories]="categories()" (close)="onClose()" />
 } @else {
-
-<app-toolbar (signedOn)="onLogout($event)" (newBlog)="onNewBlog()" />
-<section>
-  @if (blogClicked()) {
-  <app-blog-detail
-    [blogDetail]="blogDetail()"
-    [users]="users()"
-    [category]="getFullCategory(blogDetail()!.category)"
-  />
-  } @else { @for (blog of blogs(); track blog.id) {
-  <app-blog
-    [blog]="blog"
-    [author]="authorInfo(blog.author)"
-    [category]="getFullCategory(blog.category)"
-    (click)="onClickBlog(blog.id)"
-  />
-  } @if (!blogs()) {
-  <h5>Blogs not loaded...</h5>
-  } }
-</section>
+  <app-toolbar (signedOn)="onLogout($event)" (newBlog)="onNewBlog()" />
+  <section>
+    @if (blogClicked()) {
+      <app-blog-detail
+        [blogDetail]="blogDetail()"
+        [users]="users()"
+        [category]="getFullCategory(blogDetail()!.category)"
+        (deleteBlog)="onDeleteBlog($event)"
+      />
+    } @else {
+      @for (blog of blogs(); track blog.id) {
+        <app-blog
+          [blog]="blog"
+          [author]="authorInfo(blog.author)"
+          [category]="getFullCategory(blog.category)"
+          (click)="onClickBlog(blog.id)"
+        />
+      }
+      @if (!blogs()) {
+        <h5>Blogs not loaded...</h5>
+      }
+    }
+  </section>
 }

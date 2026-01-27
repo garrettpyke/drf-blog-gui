@@ -78,7 +78,7 @@ export class Blogs implements OnInit {
         console.log('Completed fetching blog detail...');
         console.log(
           `...and blogApiService.loadedBlogDetail is`,
-          this.blogApiService.loadedBlogDetail()
+          this.blogApiService.loadedBlogDetail(),
         );
 
         this.blogDetail.set(this.blogApiService.loadedBlogDetail());
@@ -113,6 +113,33 @@ export class Blogs implements OnInit {
       return;
     }
     console.log('Ya gotta be logged in to post a new blog!'); // todo
+  }
+
+  // todo: enable this function or service to proactively notify user of response status code or message from backend
+  // perhaps via snackbar or dialog
+  onDeleteBlog(deleteBlog: boolean) {
+    if (deleteBlog) {
+      const blogId = this.blogClicked();
+      if (blogId !== null) {
+        const subscription = this.blogApiService.deleteBlog(blogId).subscribe({
+          error: (error: Error) => {
+            console.error('Error deleting blog:', error.message);
+          },
+          complete: () => {
+            console.log(`Blog with ID ${blogId} deleted successfully.`);
+            // Refresh the blogs list
+            this.blogApiService.loadBlogs().subscribe();
+          },
+        });
+
+        this.destroyRef.onDestroy(() => {
+          subscription.unsubscribe();
+        });
+      }
+
+      this.blogClicked.set(null);
+      this.blogDetail.set(undefined);
+    }
   }
 
   onClose() {

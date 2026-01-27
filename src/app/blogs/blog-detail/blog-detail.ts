@@ -1,4 +1,4 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, output, computed, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -7,7 +7,7 @@ type MatCardAppearance = 'outlined' | 'raised' | 'filled';
 
 import { Comment } from '../../comments/comment/comment';
 import { type BlogDetail as BlogDetailModel } from '../blog-detail.model';
-import { type Category } from '../blog-api.service';
+import { type Category, type User, BlogApiService } from '../blog-api.service';
 
 @Component({
   selector: 'app-blog-detail',
@@ -21,13 +21,16 @@ export class BlogDetail {
   comments = computed(() => this.blogDetail()?.comments ?? []);
   category = input<Category | undefined>();
   blogAppearance: MatCardAppearance = 'raised';
+  deleteBlog = output<boolean>();
+  private blogApiService = inject(BlogApiService);
+  user = computed<User>(() => this.blogApiService.currentUser()!);
 
-  get authorEmail(): string {
+  get author(): User {
     const author = this.users()?.find((user) => user.id === this.blogDetail()?.author);
     if (author) {
-      return author.email;
+      return author;
     }
-    return 'Unknown Author';
+    return { id: -1, email: 'Unknown Author' };
   }
 
   get categorySubject(): string {
@@ -37,5 +40,11 @@ export class BlogDetail {
   authorInfo(authorId: number): string {
     const user = this.users()?.find((user) => user.id === authorId);
     return user ? user.email : 'Unknown Author';
+  }
+
+  onClickDeleteBlog() {
+    console.log('Delete Blog clicked');
+    this.deleteBlog.emit(true);
+    // Logic to handle blog deletion can be added here
   }
 }
