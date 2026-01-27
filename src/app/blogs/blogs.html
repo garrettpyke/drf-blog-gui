@@ -1,7 +1,7 @@
 @if (newBlogSubmission) {
   <app-new-blog [categories]="categories()" (close)="onClose()" />
 } @else if (updateBlog) {
-  <h1>Update Blog - To Be Implemented</h1>
+  <app-update-blog />
   <!-- <app-update-blog
     [blogDetail]="blogDetail()"
     [categories]="categories()"

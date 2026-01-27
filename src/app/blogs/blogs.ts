@@ -4,12 +4,13 @@ import { Toolbar } from '../shared/toolbar/toolbar';
 import { Blog } from './blog/blog';
 import { BlogDetail } from './blog-detail/blog-detail';
 import { NewBlog } from './new-blog/new-blog';
+import { UpdateBlog } from './update-blog/update-blog';
 import { BlogApiService } from './blog-api.service';
 import { type Category } from './blog-api.service';
 
 @Component({
   selector: 'app-blogs',
-  imports: [Toolbar, Blog, BlogDetail, NewBlog],
+  imports: [Toolbar, Blog, BlogDetail, NewBlog, UpdateBlog],
   templateUrl: './blogs.html',
   styleUrl: './blogs.css',
 })
