@@ -260,7 +260,6 @@ export class BlogApiService {
     return tokenResponse;
   }
 
-  // todo: this can result in a 204, 403 or other 400x error.
   deleteBlog(id: number) {
     const tokenResponse = this.verifyToken();
 
@@ -268,7 +267,7 @@ export class BlogApiService {
       let errorMsg = 'Unknown error occurred during blog deletion.';
 
       return this.httpClient
-        .delete<any>(`http://localhost:8000/api/blog/${id}/`, {
+        .delete<HttpResponse<any>>(`http://localhost:8000/api/blog/${id}/`, {
           headers: {
             Authorization: `token ${tokenResponse}`,
           },
@@ -292,7 +291,7 @@ export class BlogApiService {
         )
         .pipe(
           catchError((error) => {
-            return throwError(() => new Error(error.message || errorMsg));
+            return throwError(() => new Error((error.message = errorMsg)));
           }),
         );
     }
@@ -318,6 +317,7 @@ export class BlogApiService {
   //       })
   //       .pipe(
   //         tap({
+  //! may need a new fetch here!
   //           next: (blog) => {
   //             this.blogs.update((blogs) => [...blogs, blog]);
   //           },
