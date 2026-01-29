@@ -25,7 +25,7 @@ export class Blogs implements OnInit {
   categories = computed(() => this.blogApiService.loadedCategories());
   isAuthenticated = output<boolean>(); // todo next: label this consistently throughout components
   newBlogSubmission = false;
-  updateBlog = false;
+  updateBlogClicked = false;
 
   constructor() {
     // Initialize authors signal or any other setup if needed
@@ -149,9 +149,13 @@ export class Blogs implements OnInit {
     this.newBlogSubmission = false;
   }
 
-  onUpdateBlog(updateBlog: boolean) {
+  onCancel() {
+    this.updateBlogClicked = false;
+  }
+
+  onClickUpdateBlog(blogId: number) {
     if (this.blogApiService.currentUser()) {
-      this.updateBlog = true;
+      this.updateBlogClicked = true;
       return;
     }
     console.log('Ya gotta be logged in to update a blog!'); // todo

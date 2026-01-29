@@ -22,7 +22,7 @@ export class BlogDetail {
   category = input<Category | undefined>();
   blogAppearance: MatCardAppearance = 'raised';
   deleteBlog = output<boolean>();
-  updateBlog = output<boolean>();
+  updateBlog = output<number>();
   private blogApiService = inject(BlogApiService);
   user = computed<User>(() => this.blogApiService.currentUser()!);
 
@@ -50,6 +50,6 @@ export class BlogDetail {
 
   onClickUpdateBlog() {
     console.log('Update Blog clicked');
-    this.updateBlog.emit(true);
+    this.updateBlog.emit(this.blogDetail()!.id);
   }
 }
