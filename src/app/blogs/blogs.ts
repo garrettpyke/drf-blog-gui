@@ -156,32 +156,9 @@ export class Blogs implements OnInit {
   onClickUpdateBlog(blogId: number) {
     if (this.blogApiService.currentUser()) {
       this.updateBlogClicked = true;
+      // this.blogDetail.update(() => this.blogApiService.loadedBlogDetail()); //* too soon!
       return;
     }
-    console.log('Ya gotta be logged in to update a blog!'); // todo
+    console.log('Ya gotta be logged in to update a blog!');
   }
-
-  // todo: try using partial as so: onUpdateBlog(updateBlog: Partial<Blog>) {
-  // onUpdateBlog(updateBlog: <Blog>) {
-  //   if (updateBlog) {
-  //     const blogId = this.blogClicked();
-  //     if (blogId !== null) {
-  //       const subscription = this.blogApiService.updateBlog(blogId, updateBlog).subscribe({
-  //         error: (error: Error) => {
-  //           console.error('Error updating blog:', error.message);
-  //         },
-  //         complete: () => {
-  //           console.log(`Blog with ID ${blogId} updated successfully.`);
-  //           this.blogDetail.set(this.blogApiService.loadedBlogDetail());
-  //         },
-  //       });
-  //       this.destroyRef.onDestroy(() => {
-  //         subscription.unsubscribe();
-  //       });
-  //     }
-
-  //     this.blogClicked.set(null);
-  //     this.blogDetail.set(undefined);
-  //   }
-  // }
 }

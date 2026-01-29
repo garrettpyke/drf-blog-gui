@@ -1,5 +1,5 @@
 import { Component, signal, inject } from '@angular/core';
-// import { RouterOutlet } from '@angular/router'; // todo: implement
+// import { RouterOutlet } from '@angular/router'; // todo next: implement
 
 import { Header } from './header/header';
 import { Login } from './login/login';
@@ -19,8 +19,6 @@ export class App {
   user = signal<User | undefined>(undefined);
 
   constructor() {
-    // console.log(`constructor, current user: ${this.user()?.email}`);
-    // console.log(`App component signedOn: ${this.signedOn()}`);
     this.user.set(this.blogApiService.currentUser());
     if (this.user()) {
       this.signedOn.set(true);

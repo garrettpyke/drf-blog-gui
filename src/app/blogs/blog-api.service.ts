@@ -301,35 +301,61 @@ export class BlogApiService {
 
   // PATCH http://localhost:8000/api/blog/6/ HTTP/1.1 "title", "content", "category"
   // todo: This can result in a 401 error or a new blog!
-  // todo: updateBlog(id: number, updatedFields: Partial<Blog>) {
-  // updateBlog(id: number, updatedBlog: <Blog>) {
-  //   const tokenResponse = this.verifyToken();
-
-  //   if (typeof tokenResponse === 'string') {
-  //     let errorMsg = 'An error occurred during blog patch process!';
-
-  //     return this.httpClient
-  //       .patch<Blog>(`http://localhost:8000/api/blog/${id}`, updatedBlog, {
-  //         headers: {
-  //           Authorization: `token ${tokenResponse}`,
-  //         },
-  //         observe: 'response',
-  //       })
-  //       .pipe(
-  //         tap({
-  //! may need a new fetch here!
-  //           next: (blog) => {
-  //             this.blogs.update((blogs) => [...blogs, blog]);
-  //           },
-  //         }),
-  //       )
-  //       .pipe(
-  //         catchError((error) => {
-  //           return throwError(() => new Error(error.message || errorMsg));
-  //         }),
-  //       );
-  //   }
-
-  //   return tokenResponse;
-  // }
+  // todo: updateBlog(id: number, updatedFields: Partial<Blog>) - use Partial<> type in form & component?
+  updateBlog(id: number, updatedBlog: Partial<Blog>) {
+    const tokenResponse = this.verifyToken();
+    if (typeof tokenResponse === 'string') {
+      let errorMsg = 'An error occurred during blog patch process!';
+      return this.httpClient
+        .patch<BlogDetail | HttpResponse<any>>(
+          `http://localhost:8000/api/blog/${id}/`,
+          updatedBlog,
+          {
+            headers: {
+              Authorization: `token ${tokenResponse}`,
+            },
+            observe: 'response',
+          },
+        )
+        .pipe(
+          map((response) => {
+            if (response instanceof HttpResponse) {
+              if (response.status === HttpStatusCode.Accepted) {
+                const updatedBlog = response.body as BlogDetail;
+                this.blogDetail.update(() => updatedBlog);
+                // todo: blogDetail signal is refreshed, but need to trigger signal update in 'parent' component, BlogDetail
+                console.log('Blog updated successfully on server:', updatedBlog);
+                // return updatedBlog;
+              } else if (response.status === HttpStatusCode.Unauthorized) {
+                errorMsg = 'You are not authorized to update this blog.';
+                throw new Error(errorMsg);
+              } else {
+                errorMsg = `Unexpected response status: ${response.status}`;
+                throw new Error(errorMsg);
+              }
+            }
+            // return response;
+            return updatedBlog;
+          }),
+        )
+        .pipe(
+          tap({
+            next: (updatedBlog) => {
+              console.log(`Blog updated successfully on server: ${updatedBlog}`);
+              // todo: destroy subscription to avoid memory leaks
+              const subscription = this.fetchBlogs(
+                'http://localhost:8000/api/blogs/',
+                'Error loading blogs',
+              ).subscribe();
+            },
+          }),
+        )
+        .pipe(
+          catchError((error) => {
+            return throwError(() => new Error(error.message || errorMsg));
+          }),
+        );
+    }
+    return tokenResponse;
+  }
 }

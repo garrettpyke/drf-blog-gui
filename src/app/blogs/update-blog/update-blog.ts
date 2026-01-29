@@ -16,12 +16,11 @@ import { type NewBlogModel } from '../new-blog/new-blog';
 export class UpdateBlog {
   blogDetail = input.required<BlogDetailModel | undefined>();
   cancel = output<void>();
-
   blogValid = false;
   title = '';
   content = '';
   category!: number;
-  newBlog!: NewBlogModel;
+  updatedBlog!: NewBlogModel;
   categories = input<Category[]>();
   blogApiService = inject(BlogApiService);
   destroyRef = inject(DestroyRef);
@@ -41,7 +40,7 @@ export class UpdateBlog {
     console.log(`validateBlog().email: ${email}`);
 
     if (id && this.title && this.content) {
-      this.newBlog = {
+      this.updatedBlog = {
         title: this.title,
         content: this.content,
         category: this.category,
@@ -57,22 +56,29 @@ export class UpdateBlog {
   }
 
   onSubmit() {
-    // Handle form submission logic here
-    // if (this.validateBlog()) {
-    //   console.log('new blog valid!');
-    //   const subscription = this.blogApiService.postNewBlog(this.newBlog).subscribe({
-    //     error: (error: Error) => {
-    //       console.error('Error posting new blog:', error);
-    //     },
-    //     complete: () => {
-    //       console.log('Blog post completed');
-    //       this.cancel.emit();
-    //     },
-    //   });
-    //   this.destroyRef.onDestroy(() => subscription.unsubscribe());
-    // } else {
-    //   console.log('Could not validate new blog.');
-    // }
+    if (this.validateBlog()) {
+      console.log('updated blog valid!');
+      const subscription = this.blogApiService
+        .updateBlog(this.blogDetail()?.id!, this.updatedBlog)
+        .subscribe({
+          error: (error: Error) => {
+            console.error('Error updating blog:', error);
+          },
+          next: (updatedBlog) => {
+            console.log('Received updated blog from server:', updatedBlog);
+          },
+          complete: () => {
+            console.log('Blog update completed');
+            this.cancel.emit();
+          },
+        });
+      this.destroyRef.onDestroy(() => subscription.unsubscribe());
+    } else {
+      console.log('Could not validate updated blog.');
+    }
+
+    this.blogDetail.apply(() => this.updatedBlog as BlogDetailModel);
+    this.cancel.emit();
   }
 
   onCancel() {
