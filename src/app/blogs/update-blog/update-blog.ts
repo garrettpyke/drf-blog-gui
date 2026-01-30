@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, input, output } from '@angular/core';
+import { Component, DestroyRef, inject, input, output, computed } from '@angular/core';
 import { FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms'; // todo: look into validators & formbuilder usage
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -21,8 +21,8 @@ export class UpdateBlog {
   content = '';
   category!: number;
   updatedBlog!: NewBlogModel;
-  categories = input<Category[]>();
   blogApiService = inject(BlogApiService);
+  categories = computed(() => this.blogApiService.loadedCategories());
   destroyRef = inject(DestroyRef);
 
   ngOnInit() {
@@ -69,6 +69,7 @@ export class UpdateBlog {
           },
           complete: () => {
             console.log('Blog update completed');
+            // this.blogDetail.apply(this.updatedBlog as BlogDetailModel); // not working
             this.cancel.emit();
           },
         });
@@ -77,8 +78,7 @@ export class UpdateBlog {
       console.log('Could not validate updated blog.');
     }
 
-    this.blogDetail.apply(() => this.updatedBlog as BlogDetailModel);
-    this.cancel.emit();
+    // this.blogDetail.apply(() => this.updatedBlog as BlogDetailModel); // todo: figure out how to update the blog detail signal in parent component
   }
 
   onCancel() {

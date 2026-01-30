@@ -299,7 +299,6 @@ export class BlogApiService {
     return tokenResponse;
   }
 
-  // PATCH http://localhost:8000/api/blog/6/ HTTP/1.1 "title", "content", "category"
   // todo: This can result in a 401 error or a new blog!
   // todo: updateBlog(id: number, updatedFields: Partial<Blog>) - use Partial<> type in form & component?
   updateBlog(id: number, updatedBlog: Partial<Blog>) {

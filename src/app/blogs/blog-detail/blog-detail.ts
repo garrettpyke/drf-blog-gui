@@ -1,4 +1,4 @@
-import { Component, input, output, computed, inject } from '@angular/core';
+import { Component, input, output, signal, computed, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -7,23 +7,25 @@ type MatCardAppearance = 'outlined' | 'raised' | 'filled';
 
 import { Comment } from '../../comments/comment/comment';
 import { type BlogDetail as BlogDetailModel } from '../blog-detail.model';
+import { UpdateBlog } from '../update-blog/update-blog';
 import { type Category, type User, BlogApiService } from '../blog-api.service';
 
 @Component({
   selector: 'app-blog-detail',
-  imports: [MatCardModule, MatChipsModule, MatIconModule, DatePipe, Comment],
+  imports: [MatCardModule, MatChipsModule, MatIconModule, DatePipe, Comment, UpdateBlog],
   templateUrl: './blog-detail.html',
   styleUrl: './blog-detail.css',
 })
 export class BlogDetail {
-  blogDetail = input.required<BlogDetailModel | undefined>();
+  // blogDetail = input.required<BlogDetailModel | undefined>();
+  private blogApiService = inject(BlogApiService);
+  blogDetail = signal(this.blogApiService.loadedBlogDetail());
   users = input.required<{ id: number; email: string }[] | undefined>();
   comments = computed(() => this.blogDetail()?.comments ?? []);
   category = input<Category | undefined>();
   blogAppearance: MatCardAppearance = 'raised';
   deleteBlog = output<boolean>();
-  updateBlog = output<number>();
-  private blogApiService = inject(BlogApiService);
+  updateBlog = false;
   user = computed<User>(() => this.blogApiService.currentUser()!);
 
   get author(): User {
@@ -50,6 +52,15 @@ export class BlogDetail {
 
   onClickUpdateBlog() {
     console.log('Update Blog clicked');
-    this.updateBlog.emit(this.blogDetail()!.id);
+    if (!this.blogApiService.currentUser()) {
+      console.log('Ya gotta be logged in to update a blog!');
+      return;
+    }
+    this.updateBlog = true;
+  }
+
+  onCancelUpdate() {
+    console.log('Update Blog cancelled');
+    this.updateBlog = false;
   }
 }

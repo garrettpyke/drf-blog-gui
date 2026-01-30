@@ -4,13 +4,12 @@ import { Toolbar } from '../shared/toolbar/toolbar';
 import { Blog } from './blog/blog';
 import { BlogDetail } from './blog-detail/blog-detail';
 import { NewBlog } from './new-blog/new-blog';
-import { UpdateBlog } from './update-blog/update-blog';
 import { BlogApiService } from './blog-api.service';
 import { type Category } from './blog-api.service';
 
 @Component({
   selector: 'app-blogs',
-  imports: [Toolbar, Blog, BlogDetail, NewBlog, UpdateBlog],
+  imports: [Toolbar, Blog, BlogDetail, NewBlog],
   templateUrl: './blogs.html',
   styleUrl: './blogs.css',
 })
@@ -25,7 +24,6 @@ export class Blogs implements OnInit {
   categories = computed(() => this.blogApiService.loadedCategories());
   isAuthenticated = output<boolean>(); // todo next: label this consistently throughout components
   newBlogSubmission = false;
-  updateBlogClicked = false;
 
   constructor() {
     // Initialize authors signal or any other setup if needed
@@ -147,18 +145,5 @@ export class Blogs implements OnInit {
 
   onClose() {
     this.newBlogSubmission = false;
-  }
-
-  onCancel() {
-    this.updateBlogClicked = false;
-  }
-
-  onClickUpdateBlog(blogId: number) {
-    if (this.blogApiService.currentUser()) {
-      this.updateBlogClicked = true;
-      // this.blogDetail.update(() => this.blogApiService.loadedBlogDetail()); //* too soon!
-      return;
-    }
-    console.log('Ya gotta be logged in to update a blog!');
   }
 }
