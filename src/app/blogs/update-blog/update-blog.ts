@@ -65,11 +65,14 @@ export class UpdateBlog {
             console.error('Error updating blog:', error);
           },
           next: (updatedBlog) => {
-            console.log('Received updated blog from server:', updatedBlog);
+            console.log('Received updated blog from server:', updatedBlog as BlogDetailModel);
+            this.updatedBlog = updatedBlog as BlogDetailModel;
           },
           complete: () => {
             console.log('Blog update completed');
             // this.blogDetail.apply(this.updatedBlog as BlogDetailModel); // not working
+            // this.updatedBlog = updatedBlog
+            this.category = this.updatedBlog.category; // todo: remove if not needed
             this.cancel.emit();
           },
         });
@@ -77,8 +80,6 @@ export class UpdateBlog {
     } else {
       console.log('Could not validate updated blog.');
     }
-
-    // this.blogDetail.apply(() => this.updatedBlog as BlogDetailModel); // todo: figure out how to update the blog detail signal in parent component
   }
 
   onCancel() {

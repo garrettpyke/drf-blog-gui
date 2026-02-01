@@ -17,16 +17,29 @@ import { type Category, type User, BlogApiService } from '../blog-api.service';
   styleUrl: './blog-detail.css',
 })
 export class BlogDetail {
-  // blogDetail = input.required<BlogDetailModel | undefined>();
   private blogApiService = inject(BlogApiService);
   blogDetail = signal(this.blogApiService.loadedBlogDetail());
   users = input.required<{ id: number; email: string }[] | undefined>();
   comments = computed(() => this.blogDetail()?.comments ?? []);
+
+  categories = signal<Category[]>(this.blogApiService.loadedCategories());
+  currentCategory = signal(this.blogApiService.loadedCurrentCategory);
+  categorySubject = computed(() => {
+    const cat = this.blogApiService.loadedBlogDetail()!.category;
+    const category = this.categories().find((c) => c.id === cat);
+    return category ? category.subject : 'Uncategorized';
+  });
+
   category = input<Category | undefined>();
   blogAppearance: MatCardAppearance = 'raised';
   deleteBlog = output<boolean>();
   updateBlog = false;
   user = computed<User>(() => this.blogApiService.currentUser()!);
+
+  constructor() {
+    console.log(this.categories());
+    // console.log(`Categories: ${JSON.stringify(this.categories())}`);
+  }
 
   get author(): User {
     const author = this.users()?.find((user) => user.id === this.blogDetail()?.author);
@@ -34,10 +47,6 @@ export class BlogDetail {
       return author;
     }
     return { id: -1, email: 'Unknown Author' };
-  }
-
-  get categorySubject(): string {
-    return this.category()?.subject || 'Uncategorized';
   }
 
   authorInfo(authorId: number): string {
@@ -61,6 +70,7 @@ export class BlogDetail {
 
   onCancelUpdate() {
     console.log('Update Blog cancelled');
+    this.blogDetail.set(this.blogApiService.loadedBlogDetail());
     this.updateBlog = false;
   }
 }
